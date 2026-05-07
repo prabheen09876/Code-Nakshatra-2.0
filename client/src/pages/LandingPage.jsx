@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
-import { Shield, Play, Menu, X, ArrowRight, Lock, Star, RefreshCw, Zap, Briefcase, Users } from 'lucide-react';
+import { Shield, Play, Menu, X, ArrowRight, Lock, Star, RefreshCw, Zap, Briefcase, Users, Bell, Clock, DollarSign, CheckCircle, Flame } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import './LandingPage.css';
 
@@ -239,6 +239,95 @@ const LandingPage = () => {
           </ul>
         </motion.div>
       </main>
+
+      {/* ——— DUAL BRANCH SECTION ——— */}
+      <section className="dual-branch-section" id="dual-branch">
+        <div className="dual-branch-header">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+          >
+            <div className="dual-branch-sys-label">TWO BRANCHES // ONE NETWORK</div>
+            <h2 className="dual-branch-title">
+              CHOOSE YOUR <span className="text-orange">ENGAGEMENT MODEL</span>
+            </h2>
+            <p className="dual-branch-desc">
+              Accredify operates dual branches to match your preferred working style. Build long-term professional credibility or jump into instant, real-time gig opportunities.
+            </p>
+          </motion.div>
+        </div>
+
+        <div className="branch-cards-container">
+          {/* Freelancer Branch */}
+          <motion.div
+            className="branch-card freelancer-card"
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+          >
+            <Briefcase size={200} className="branch-card-bg-icon" />
+            <div className="branch-tag">BRANCH 01: CORE</div>
+            <h3 className="branch-title">PROPOSAL-BASED<br />FREELANCING</h3>
+            <ul className="branch-features">
+              <li><CheckCircle size={16} /> Strict scope locking and milestones</li>
+              <li><CheckCircle size={16} /> Revision tracking and discipline logs</li>
+              <li><CheckCircle size={16} /> Payment security via Escrow Vault</li>
+              <li><CheckCircle size={16} /> Long-term behavioral credibility score</li>
+            </ul>
+            <div style={{ marginTop: 'auto' }}>
+              <Link to="/register" className="ind-btn ind-btn-outline" style={{ border: '1px solid #555', color: '#E2E2E2', width: '100%', textAlign: 'center', display: 'block' }}>
+                BUILD CREDIBILITY
+              </Link>
+            </div>
+          </motion.div>
+
+          {/* Gig Worker Branch */}
+          <motion.div
+            className="branch-card gig-worker-card"
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+          >
+            <Flame size={200} className="branch-card-bg-icon" />
+            <div className="branch-tag">BRANCH 02: ACTIVE</div>
+            <h3 className="branch-title">REAL-TIME<br />GIG NETWORK</h3>
+            <ul className="branch-features">
+              <li><Zap size={16} /> Toggle "Daily Gig Mode" to go live</li>
+              <li><Zap size={16} /> No proposals. Get matched instantly</li>
+              <li><Zap size={16} /> Instant popup notifications for new gigs</li>
+              <li><Zap size={16} /> Immediate chat and commencement</li>
+            </ul>
+            
+            {/* Live Popup Mockup */}
+            <div className="daily-gig-mockup">
+              <div className="mockup-header">
+                <div className="mockup-title">
+                  <div className="mockup-status-dot"></div>
+                  DAILY GIG MODE: ONLINE
+                </div>
+                <div className="mockup-toggle"></div>
+              </div>
+              
+              <div className="mockup-popup">
+                <div className="mockup-popup-label"><Bell size={12} /> NEW GIG MATCH</div>
+                <div className="mockup-gig-title">React Dashboard Fix</div>
+                <div className="mockup-gig-details">
+                  <div className="mockup-gig-detail"><DollarSign size={12} style={{verticalAlign:'middle', marginRight:'2px'}}/><span>$150</span></div>
+                  <div className="mockup-gig-detail"><Clock size={12} style={{verticalAlign:'middle', marginRight:'2px'}}/><span>~2 Hours</span></div>
+                </div>
+                <div className="mockup-buttons">
+                  <div className="mockup-btn mockup-btn-reject">REJECT</div>
+                  <div className="mockup-btn mockup-btn-accept">ACCEPT</div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
       {/* ——— PLATFORM INTRO BAND ——— */}
       <section className="platform-band">

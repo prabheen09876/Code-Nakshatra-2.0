@@ -1794,3 +1794,284 @@
     height: 380px;
   }
 }
+
+/* ================================================================
+   DUAL BRANCH SECTION
+================================================================ */
+.dual-branch-section {
+  position: relative;
+  z-index: 20;
+  padding: 8rem 2rem 6rem;
+  background: #111;
+  border-top: 2px solid #333;
+  color: #E2E2E2;
+}
+
+.dual-branch-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.dual-branch-sys-label {
+  font-size: 0.65rem;
+  color: #FF7A00;
+  letter-spacing: 0.25em;
+  margin-bottom: 1rem;
+}
+
+.dual-branch-title {
+  font-size: clamp(2rem, 5vw, 4rem);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  color: #E2E2E2;
+}
+
+.dual-branch-desc {
+  max-width: 600px;
+  margin: 0 auto;
+  font-size: 0.8rem;
+  color: #A0A0A0;
+  line-height: 1.8;
+  text-transform: none;
+}
+
+.branch-cards-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.branch-card {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  padding: 3rem;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.branch-card:hover {
+  transform: translateY(-5px);
+  border-color: #555;
+}
+
+.branch-card.gig-worker-card {
+  background: linear-gradient(180deg, #1a1a1a 0%, #151515 100%);
+  border: 1px solid rgba(255, 122, 0, 0.3);
+}
+
+.branch-card.gig-worker-card:hover {
+  border-color: #FF7A00;
+  box-shadow: 0 10px 40px rgba(255, 122, 0, 0.1);
+}
+
+.branch-card-bg-icon {
+  position: absolute;
+  right: -20px;
+  top: -20px;
+  opacity: 0.03;
+  transform: scale(3);
+  pointer-events: none;
+}
+
+.gig-worker-card .branch-card-bg-icon {
+  color: #FF7A00;
+  opacity: 0.05;
+}
+
+.branch-tag {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  padding: 0.4rem 0.8rem;
+  background: #333;
+  color: #E2E2E2;
+  border-radius: 999px;
+  align-self: flex-start;
+  margin-bottom: 2rem;
+}
+
+.gig-worker-card .branch-tag {
+  background: rgba(255, 122, 0, 0.15);
+  color: #FF7A00;
+  border: 1px solid rgba(255, 122, 0, 0.3);
+}
+
+.branch-title {
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+}
+
+.branch-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 3rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.branch-features li {
+  font-size: 0.75rem;
+  color: #D4D4D4;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.branch-features li svg {
+  color: #888;
+}
+
+.gig-worker-card .branch-features li svg {
+  color: #FF7A00;
+}
+
+/* Daily Gig Mode Mockup */
+.daily-gig-mockup {
+  margin-top: auto;
+  border: 1px solid #333;
+  border-radius: 8px;
+  background: #111;
+  padding: 1.5rem;
+  position: relative;
+}
+
+.mockup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed #333;
+}
+
+.mockup-title {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #E2E2E2;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.mockup-status-dot {
+  width: 8px;
+  height: 8px;
+  background: #00FF66;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(0, 255, 102, 0.6);
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0% { box-shadow: 0 0 0 0 rgba(0, 255, 102, 0.4); }
+  70% { box-shadow: 0 0 0 6px rgba(0, 255, 102, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 255, 102, 0); }
+}
+
+.mockup-toggle {
+  width: 36px;
+  height: 20px;
+  background: #FF7A00;
+  border-radius: 999px;
+  position: relative;
+}
+
+.mockup-toggle::after {
+  content: '';
+  position: absolute;
+  right: 2px;
+  top: 2px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+}
+
+.mockup-popup {
+  background: rgba(255, 122, 0, 0.05);
+  border: 1px solid rgba(255, 122, 0, 0.3);
+  border-radius: 8px;
+  padding: 1rem;
+  animation: slide-up 0.5s ease forwards;
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.mockup-popup-label {
+  font-size: 0.55rem;
+  color: #FF7A00;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.mockup-gig-title {
+  font-size: 1rem;
+  font-weight: 900;
+  color: #E2E2E2;
+  margin-bottom: 0.5rem;
+}
+
+.mockup-gig-details {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.65rem;
+  color: #D4D4D4;
+  margin-bottom: 1rem;
+}
+
+.mockup-gig-detail span {
+  color: #E2E2E2;
+  font-weight: 700;
+}
+
+.mockup-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.mockup-btn {
+  flex: 1;
+  padding: 0.5rem;
+  text-align: center;
+  font-size: 0.65rem;
+  font-weight: 800;
+  border-radius: 4px;
+  cursor: default;
+}
+
+.mockup-btn-accept {
+  background: #FF7A00;
+  color: #111;
+}
+
+.mockup-btn-reject {
+  background: transparent;
+  border: 1px solid #333;
+  color: #A0A0A0;
+}
+
+@media (max-width: 768px) {
+  .branch-cards-container {
+    grid-template-columns: 1fr;
+  }
+}
