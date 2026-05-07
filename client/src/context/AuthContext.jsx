@@ -18,12 +18,12 @@ export const AuthProvider = ({ children }) => {
         const loadUser = async () => {
             if (token) {
                 try {
+                    // Verify token and fetch user
                     const res = await authAPI.getMe();
                     setUser(res.data);
                 } catch (err) {
-                    console.error('Token invalid or expired', err);
+                    console.error("Token invalid or expired", err);
                     logout();
-                    setError('Session expired. Please log in again.');
                 }
             }
             setLoading(false);
@@ -32,21 +32,11 @@ export const AuthProvider = ({ children }) => {
         loadUser();
     }, [token]);
 
-    useEffect(() => {
-        const handleUnauthorized = () => {
-            logout();
-            setError('Session expired. Please log in again.');
-            setLoading(false);
-        };
-
-        window.addEventListener('auth:unauthorized', handleUnauthorized);
-        return () => window.removeEventListener('auth:unauthorized', handleUnauthorized);
-    }, []);
-
     const login = async (email, password) => {
         setError(null);
         try {
-            const res = await authAPI.login({ email, password });
+            const normalizedEmail = email.trim().toLowerCase();
+            const res = await authAPI.login({ email: normalizedEmail, password });
             const { token: newToken, user: userData } = res.data || {};
 
             if (!newToken || !userData) {
@@ -59,7 +49,11 @@ export const AuthProvider = ({ children }) => {
             setUser(userData);
             return true;
         } catch (err) {
-            setError(err.response?.data?.message || 'Login failed');
+            if (!err.response) {
+                setError('Cannot reach API server. Start backend on port 8788 and try again.');
+            } else {
+                setError(err.response?.data?.message || 'Login failed');
+            }
             return false;
         }
     };
@@ -67,7 +61,13 @@ export const AuthProvider = ({ children }) => {
     const register = async (userData) => {
         setError(null);
         try {
-            const res = await authAPI.register(userData);
+            const payload = {
+                ...userData,
+                name: userData.name?.trim(),
+                email: userData.email?.trim().toLowerCase(),
+                role: userData.role?.trim().toLowerCase(),
+            };
+            const res = await authAPI.register(payload);
             const { token: newToken, user: newUser } = res.data || {};
 
             if (!newToken || !newUser) {
@@ -80,6 +80,11 @@ export const AuthProvider = ({ children }) => {
             setUser(newUser);
             return true;
         } catch (err) {
+            if (!err.response) {
+                setError('Cannot reach API server. Start backend on port 8788 and try again.');
+                return false;
+            }
+            // Handle express-validator errors array or general message
             if (err.response?.data?.errors) {
                 setError(err.response.data.errors[0].message);
             } else {
