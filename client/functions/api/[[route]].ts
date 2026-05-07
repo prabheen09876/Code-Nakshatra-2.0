@@ -3,15 +3,81 @@ import { handle } from 'hono/cloudflare-pages';
 import { drizzle } from 'drizzle-orm/d1';
 import * as schema from '../../src/db/schema';
 import { sign, verify, decode } from 'hono/jwt';
-import { eq, or, and } from 'drizzle-orm';
+import { eq, or, and, ne, desc } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
+import { generateGeminiText, MAYA_SYSTEM } from '../lib/gemini';
 
 export type Bindings = {
     DB: D1Database;
     JWT_SECRET: string;
+    GEMINI_API_KEY?: string;
 };
 
 const app = new Hono<{ Bindings: Bindings }>().basePath('/api');
+
+function parseSkillsInput(raw: unknown): string[] {
+    if (Array.isArray(raw))
+        return raw.map((x) => String(x).trim()).filter(Boolean).slice(0, 48);
+    if (typeof raw === 'string')
+        return raw
+            .split(/[,;\n]+/)
+            .map((s) => s.trim())
+            .filter(Boolean)
+            .slice(0, 48);
+    return [];
+}
+
+function normalizeSkillToken(s: string): string {
+    return s.trim().toLowerCase();
+}
+
+/** D1 / Drizzle often returns JSON columns as strings — normalize before matching */
+function coerceSkillsArray(raw: unknown): string[] {
+    if (raw == null) return [];
+    if (Array.isArray(raw)) return raw.map((x) => String(x).trim()).filter(Boolean);
+    if (typeof raw === 'string') {
+        const s = raw.trim();
+        if (!s || s === '[]') return [];
+        try {
+            const parsed = JSON.parse(s);
+            if (Array.isArray(parsed)) return parsed.map((x) => String(x).trim()).filter(Boolean);
+        } catch {
+            /* plain comma-separated fallback */
+        }
+        return parseSkillsInput(s);
+    }
+    return [];
+}
+
+function freelancerMatchesGigSkills(freelancerSkillsRaw: unknown, gigSkillsRaw: unknown): boolean {
+    const freelancerSkills = coerceSkillsArray(freelancerSkillsRaw);
+    const gigSkills = coerceSkillsArray(gigSkillsRaw);
+    const gn = gigSkills.map(normalizeSkillToken).filter(Boolean);
+    const fnSet = new Set(freelancerSkills.map(normalizeSkillToken));
+    if (gn.length === 0) return false;
+    for (const g of gn) {
+        if (fnSet.has(g)) return true;
+        for (const f of fnSet) {
+            if (f.includes(g) || g.includes(f)) return true;
+        }
+    }
+    return false;
+}
+
+async function getOrCreateDirectConversation(db: any, uid: number, otherId: number) {
+    const existing = await db.query.conversations.findFirst({
+        where: or(
+            and(eq(schema.conversations.participant1Id, uid), eq(schema.conversations.participant2Id, otherId)),
+            and(eq(schema.conversations.participant1Id, otherId), eq(schema.conversations.participant2Id, uid))
+        )
+    });
+    if (existing) return existing.id;
+    const [row] = await db
+        .insert(schema.conversations)
+        .values({ participant1Id: uid, participant2Id: otherId })
+        .returning();
+    return row.id;
+}
 
 // ─── Health Check ───────────────────────────────────────────
 app.get('/health', (c) => {
@@ -71,10 +137,13 @@ app.post('/auth/register', async (c) => {
                 name: newUser.name,
                 email: newUser.email,
                 role: newUser.role,
-                trustScore: newUser.trustScore
+                trustScore: newUser.trustScore,
+                dailyGigMode: !!(newUser as any).dailyGigMode,
+                skills: (((newUser as any).skillsJson as string[]) || []) as string[],
+                availabilityStatus: (newUser as any).dailyGigMode ? 'Available Now' : 'Offline',
             },
-            token
-        }
+            token,
+        },
     }, 201);
 });
 
@@ -116,10 +185,13 @@ app.post('/auth/login', async (c) => {
                 name: user.name,
                 email: user.email,
                 role: user.role,
-                trustScore: user.trustScore
+                trustScore: user.trustScore,
+                dailyGigMode: !!(user as any).dailyGigMode,
+                skills: (((user as any).skillsJson as string[]) || []) as string[],
+                availabilityStatus: (user as any).dailyGigMode ? 'Available Now' : 'Offline',
             },
-            token
-        }
+            token,
+        },
     });
 });
 
@@ -165,6 +237,8 @@ app.get('/auth/me', authMiddleware, async (c) => {
 
     if (!user) return c.json({ success: false, message: 'User not found' }, 404);
 
+    const skillsSafe = ((((user as any).skillsJson as string[]) ?? []) || []) as string[];
+
     return c.json({
         success: true,
         data: {
@@ -177,7 +251,10 @@ app.get('/auth/me', authMiddleware, async (c) => {
             scopeCreepIndex: user.scopeCreepIndex,
             disputeRatio: user.disputeRatio,
             trustVelocity: user.trustVelocity,
-        }
+            dailyGigMode: !!(user as any).dailyGigMode,
+            skills: skillsSafe,
+            availabilityStatus: (user as any).dailyGigMode ? 'Available Now' : 'Offline',
+        },
     });
 });
 
@@ -222,10 +299,315 @@ app.get('/users/freelancers', async (c) => {
         scopeCreepIndex: schema.users.scopeCreepIndex,
         disputeRatio: schema.users.disputeRatio,
         trustVelocity: schema.users.trustVelocity,
+        dailyGigMode: schema.users.dailyGigMode,
+        skillsJson: schema.users.skillsJson,
         createdAt: schema.users.createdAt,
     }).from(schema.users).where(eq(schema.users.role, 'freelancer'));
 
-    return c.json({ success: true, count: freelancers.length, data: freelancers });
+    const enriched = freelancers.map((f: any) => {
+        const skills = (f.skillsJson as string[]) ?? [];
+        const { skillsJson: _omit, ...rest } = f;
+        return {
+            ...rest,
+            skills,
+            availabilityStatus: f.dailyGigMode === true ? 'Available Now' : 'Offline',
+        };
+    });
+
+    return c.json({ success: true, count: enriched.length, data: enriched });
+});
+
+/** Freelancer-only: toggle Daily Gig Mode and/or update skills tags */
+app.patch('/users/me', authMiddleware, async (c) => {
+    const db = drizzle(c.env.DB, { schema });
+    const userId = c.get('userId') as number;
+    const me = await db.query.users.findFirst({ where: eq(schema.users.id, userId) });
+    if (!me) return c.json({ success: false, message: 'User not found' }, 404);
+    if (me.role !== 'freelancer')
+        return c.json({ success: false, message: 'Only freelancers can update this profile section' }, 403);
+
+    const body = await c.req.json().catch(() => ({}));
+    let hasPatch = false;
+    const patch: Record<string, unknown> = { updatedAt: new Date() };
+    if (typeof body.dailyGigMode === 'boolean') {
+        patch['dailyGigMode'] = body.dailyGigMode;
+        hasPatch = true;
+    }
+    if (body.skills !== undefined) {
+        patch['skillsJson'] = parseSkillsInput(body.skills);
+        hasPatch = true;
+    }
+    if (!hasPatch) return c.json({ success: false, message: 'Provide dailyGigMode and/or skills' }, 400);
+
+    await db.update(schema.users).set(patch).where(eq(schema.users.id, userId));
+
+    const user = await db.query.users.findFirst({
+        where: eq(schema.users.id, userId),
+        columns: { password: false },
+    });
+
+    const skillsSafe = ((((user as any)?.skillsJson as string[]) ?? []) || []) as string[];
+
+    return c.json({
+        success: true,
+        data: {
+            id: user!.id,
+            name: user!.name,
+            email: user!.email,
+            role: user!.role,
+            trustScore: user!.trustScore,
+            scopeDiscipline: user!.scopeDiscipline,
+            scopeCreepIndex: user!.scopeCreepIndex,
+            disputeRatio: user!.disputeRatio,
+            trustVelocity: user!.trustVelocity,
+            dailyGigMode: !!(user as any).dailyGigMode,
+            skills: skillsSafe,
+            availabilityStatus: (user as any).dailyGigMode ? 'Available Now' : 'Offline',
+        },
+    });
+});
+
+// ─── Daily Gig Mode (instant gigs) ───────────────────────────
+app.post('/gigs', authMiddleware, async (c) => {
+    const db = drizzle(c.env.DB, { schema });
+    const recruiterId = c.get('userId') as number;
+    const recruiter = await db.query.users.findFirst({
+        where: eq(schema.users.id, recruiterId),
+    });
+    if (!recruiter || recruiter.role !== 'client')
+        return c.json({ success: false, message: 'Only clients (recruiters) can post instant gigs' }, 403);
+
+    const body = await c.req.json().catch(() => ({}));
+    const title = String(body.title ?? '').trim();
+    const budget = String(body.budget ?? '').trim();
+    const duration = String(body.duration ?? '').trim();
+    const requiredSkills = parseSkillsInput(body.requiredSkills ?? body.required_skills ?? []);
+    const description = body.description ? String(body.description).trim() : '';
+
+    if (!title || !budget || !duration) {
+        return c.json({ success: false, message: 'title, budget, and duration are required' }, 400);
+    }
+    if (requiredSkills.length === 0) {
+        return c.json(
+            { success: false, message: 'Add at least one required skill so Daily Gig freelancers can match' },
+            400
+        );
+    }
+
+    const [gigRow] = await db
+        .insert(schema.dailyGigs)
+        .values({
+            clientId: recruiterId,
+            title,
+            budget,
+            duration,
+            requiredSkills,
+            description: description || undefined,
+            status: 'open',
+        })
+        .returning();
+
+    const candidates = await db
+        .select()
+        .from(schema.users)
+        .where(and(eq(schema.users.role, 'freelancer'), eq(schema.users.dailyGigMode, true)));
+
+    let dispatched = 0;
+    const nowSkillsNormalized = coerceSkillsArray(gigRow.requiredSkills);
+
+    for (const f of candidates) {
+        if (!freelancerMatchesGigSkills((f as { skillsJson?: unknown }).skillsJson, nowSkillsNormalized)) continue;
+        try {
+            await db.insert(schema.gigOffers).values({
+                gigId: gigRow.id,
+                freelancerId: f.id,
+                status: 'pending',
+            });
+            dispatched++;
+        } catch {
+            /* ignore duplicate gig-offer collisions */
+        }
+    }
+
+    return c.json({
+        success: true,
+        data: {
+            ...gigRow,
+            recruiterNotifiedFreelancers: dispatched,
+            freelancersListeningNow: candidates.length,
+            requiredSkills,
+        },
+    }, 201);
+});
+
+app.get('/gigs/freelancer/offers', authMiddleware, async (c) => {
+    const db = drizzle(c.env.DB, { schema });
+    const userId = c.get('userId') as number;
+    const me = await db.query.users.findFirst({ where: eq(schema.users.id, userId) });
+    if (!me || me.role !== 'freelancer')
+        return c.json({ success: false, message: 'Freelancers only' }, 403);
+
+    const rows = await db
+        .select({
+            offerId: schema.gigOffers.id,
+            status: schema.gigOffers.status,
+            createdAt: schema.gigOffers.createdAt,
+            gigId: schema.dailyGigs.id,
+            title: schema.dailyGigs.title,
+            budget: schema.dailyGigs.budget,
+            duration: schema.dailyGigs.duration,
+            requiredSkills: schema.dailyGigs.requiredSkills,
+            description: schema.dailyGigs.description,
+            gigStatus: schema.dailyGigs.status,
+            clientId: schema.users.id,
+            clientName: schema.users.name,
+            clientEmail: schema.users.email,
+            clientTrust: schema.users.trustScore,
+        })
+        .from(schema.gigOffers)
+        .innerJoin(schema.dailyGigs, eq(schema.gigOffers.gigId, schema.dailyGigs.id))
+        .innerJoin(schema.users, eq(schema.dailyGigs.clientId, schema.users.id))
+        .where(
+            and(eq(schema.gigOffers.freelancerId, userId), eq(schema.gigOffers.status, 'pending'), eq(schema.dailyGigs.status, 'open'))
+        )
+        .orderBy(desc(schema.gigOffers.createdAt));
+
+    return c.json({ success: true, data: rows });
+});
+
+app.post('/gigs/offers/:offerId/respond', authMiddleware, async (c) => {
+    const db = drizzle(c.env.DB, { schema });
+    const userId = c.get('userId') as number;
+    const offerId = parseInt(c.req.param('offerId'), 10);
+    const body = await c.req.json().catch(() => ({}));
+    const action = String(body.action ?? '').toLowerCase();
+    if (!['accept', 'reject'].includes(action)) {
+        return c.json({ success: false, message: 'action must be accept or reject' }, 400);
+    }
+
+    const offer = await db.query.gigOffers.findFirst({
+        where: eq(schema.gigOffers.id, offerId),
+    });
+    if (!offer || offer.freelancerId !== userId)
+        return c.json({ success: false, message: 'Offer not found' }, 404);
+
+    const gig = await db.query.dailyGigs.findFirst({
+        where: eq(schema.dailyGigs.id, offer.gigId),
+    });
+
+    if (!gig || gig.status !== 'open')
+        return c.json({ success: false, message: 'This gig is no longer accepting responses' }, 400);
+
+    if (offer.status !== 'pending')
+        return c.json({ success: false, message: 'You already responded to this gig' }, 400);
+
+    if (action === 'reject') {
+        await db.update(schema.gigOffers).set({ status: 'rejected' }).where(eq(schema.gigOffers.id, offerId));
+        return c.json({ success: true, data: { responded: 'rejected', offerId } });
+    }
+
+    const [filledGig] = await db
+        .update(schema.dailyGigs)
+        .set({
+            status: 'filled',
+            acceptedFreelancerId: userId,
+            updatedAt: new Date(),
+        })
+        .where(and(eq(schema.dailyGigs.id, gig.id), eq(schema.dailyGigs.status, 'open')))
+        .returning();
+
+    if (!filledGig) {
+        return c.json({ success: false, message: 'This gig was just filled by another freelancer' }, 409);
+    }
+
+    await db.update(schema.gigOffers).set({ status: 'accepted' }).where(eq(schema.gigOffers.id, offerId));
+
+    await db
+        .update(schema.gigOffers)
+        .set({ status: 'rejected' })
+        .where(
+            and(eq(schema.gigOffers.gigId, gig.id), ne(schema.gigOffers.id, offerId), eq(schema.gigOffers.status, 'pending'))
+        );
+
+    const convId = await getOrCreateDirectConversation(db, userId, gig.clientId);
+
+    await db.insert(schema.directMessages).values({
+        conversationId: convId,
+        senderId: userId,
+        content: `[Daily Gig] I accepted “${gig.title}”. Ready to kick off.`,
+    });
+
+    await db.insert(schema.gigRecruiterAlerts).values({
+        clientId: gig.clientId,
+        gigId: gig.id,
+        freelancerId: userId,
+        read: false,
+    });
+
+    await db.update(schema.conversations).set({ lastMessageAt: new Date() }).where(eq(schema.conversations.id, convId));
+
+    return c.json({
+        success: true,
+        data: {
+            responded: 'accepted',
+            offerId,
+            gigId: gig.id,
+            conversationId: convId,
+            clientId: gig.clientId,
+        },
+    });
+});
+
+app.get('/gigs/recruiter/alerts', authMiddleware, async (c) => {
+    const db = drizzle(c.env.DB, { schema });
+    const userId = c.get('userId') as number;
+    const me = await db.query.users.findFirst({ where: eq(schema.users.id, userId) });
+    if (!me || me.role !== 'client')
+        return c.json({ success: false, message: 'Clients only' }, 403);
+
+    const url = new URL(c.req.url);
+    const unreadOnly = url.searchParams.get('unread') === '1';
+
+    const q = db
+        .select({
+            id: schema.gigRecruiterAlerts.id,
+            read: schema.gigRecruiterAlerts.read,
+            createdAt: schema.gigRecruiterAlerts.createdAt,
+            gigId: schema.dailyGigs.id,
+            gigTitle: schema.dailyGigs.title,
+            budget: schema.dailyGigs.budget,
+            duration: schema.dailyGigs.duration,
+            freelancerId: schema.users.id,
+            freelancerName: schema.users.name,
+            freelancerEmail: schema.users.email,
+        })
+        .from(schema.gigRecruiterAlerts)
+        .innerJoin(schema.dailyGigs, eq(schema.gigRecruiterAlerts.gigId, schema.dailyGigs.id))
+        .innerJoin(schema.users, eq(schema.gigRecruiterAlerts.freelancerId, schema.users.id))
+        .where(
+            unreadOnly
+                ? and(eq(schema.gigRecruiterAlerts.clientId, userId), eq(schema.gigRecruiterAlerts.read, false))
+                : eq(schema.gigRecruiterAlerts.clientId, userId)
+        )
+        .orderBy(desc(schema.gigRecruiterAlerts.createdAt));
+
+    const rows = await q;
+    return c.json({ success: true, data: rows });
+});
+
+app.patch('/gigs/recruiter/alerts/:id/read', authMiddleware, async (c) => {
+    const db = drizzle(c.env.DB, { schema });
+    const userId = c.get('userId') as number;
+    const alertId = parseInt(c.req.param('id'), 10);
+    const row = await db.query.gigRecruiterAlerts.findFirst({
+        where: eq(schema.gigRecruiterAlerts.id, alertId),
+    });
+    if (!row || row.clientId !== userId) return c.json({ success: false, message: 'Alert not found' }, 404);
+    await db
+        .update(schema.gigRecruiterAlerts)
+        .set({ read: true })
+        .where(eq(schema.gigRecruiterAlerts.id, alertId));
+    return c.json({ success: true, data: { id: alertId, read: true } });
 });
 
 app.get('/users/:id', async (c) => {
@@ -648,6 +1030,194 @@ app.post('/conversations/:id/messages', authMiddleware, async (c) => {
     }).where(eq(schema.conversations.id, conversationId));
 
     return c.json({ success: true, data: { _id: newMsg.id, ...newMsg } }, 201);
+});
+
+// ─── MAYA (Gemini) ──────────────────────────────────────────
+const MAYA_GEMINI_KEY_MESSAGE =
+    'MAYA needs a non-empty GEMINI_API_KEY in client/.dev.vars (same folder as wrangler.toml). Root .env and .env.example are not loaded by Cloudflare Workers. Get a key at https://aistudio.google.com/apikey — then restart npm run dev:api (or use npm run dev:all).';
+
+const MAYA_STRUCTURED_MODES = new Set([
+    'scope',
+    'job_post',
+    'milestones',
+    'interview',
+    'proposal',
+    'summarize',
+    'contract',
+    'fraud',
+    'career',
+    'team',
+    'budget',
+    'nda',
+]);
+
+app.post('/maya/chat', authMiddleware, async (c) => {
+    const key = c.env.GEMINI_API_KEY?.trim();
+    if (!key) {
+        return c.json({ success: false, message: MAYA_GEMINI_KEY_MESSAGE }, 503);
+    }
+
+    const body = await c.req.json().catch(() => ({}));
+    if (body.mode === 'match') {
+        return c.json(
+            {
+                success: false,
+                message: 'Freelancer matching uses POST /api/maya/match with { "brief": "..." }.',
+            },
+            400
+        );
+    }
+
+    const mode = typeof body.mode === 'string' && body.mode in MAYA_SYSTEM ? body.mode : 'chat';
+    const rawMessages = Array.isArray(body.messages) ? body.messages : [];
+    const messages = rawMessages
+        .filter((m: unknown) => {
+            if (!m || typeof m !== 'object') return false;
+            const r = m as { role?: string; content?: string };
+            return (r.role === 'user' || r.role === 'assistant') && typeof r.content === 'string';
+        })
+        .map((m: { role: string; content: string }) => ({
+            role: m.role as 'user' | 'assistant',
+            content: m.content.slice(0, 24000),
+        }))
+        .slice(-30);
+
+    if (messages.length === 0) {
+        return c.json({ success: false, message: 'Provide at least one chat message' }, 400);
+    }
+
+    const systemPrompt = MAYA_SYSTEM[mode];
+    const jsonMode = MAYA_STRUCTURED_MODES.has(mode);
+
+    try {
+        const text = await generateGeminiText({
+            apiKey: key,
+            systemPrompt,
+            messages,
+            jsonMode,
+        });
+
+        let structured: unknown = null;
+        if (jsonMode) {
+            try {
+                structured = JSON.parse(text);
+            } catch {
+                structured = null;
+            }
+        }
+
+        return c.json({
+            success: true,
+            data: {
+                mode,
+                reply: text,
+                structured,
+            },
+        });
+    } catch (e) {
+        const msg = e instanceof Error ? e.message : 'Gemini request failed';
+        return c.json({ success: false, message: msg }, 502);
+    }
+});
+
+app.post('/maya/match', authMiddleware, async (c) => {
+    const key = c.env.GEMINI_API_KEY?.trim();
+    if (!key) {
+        return c.json({ success: false, message: MAYA_GEMINI_KEY_MESSAGE }, 503);
+    }
+
+    const body = await c.req.json().catch(() => ({}));
+    const brief = typeof body.brief === 'string' ? body.brief.trim().slice(0, 12000) : '';
+    if (!brief) {
+        return c.json({ success: false, message: 'brief is required' }, 400);
+    }
+
+    const db = drizzle(c.env.DB, { schema });
+
+    const freelancers = await db.select({
+        id: schema.users.id,
+        name: schema.users.name,
+        trustScore: schema.users.trustScore,
+        scopeDiscipline: schema.users.scopeDiscipline,
+        scopeCreepIndex: schema.users.scopeCreepIndex,
+        disputeRatio: schema.users.disputeRatio,
+        trustVelocity: schema.users.trustVelocity,
+    }).from(schema.users).where(eq(schema.users.role, 'freelancer'));
+
+    if (freelancers.length === 0) {
+        return c.json({
+            success: true,
+            data: {
+                reply: 'No freelancers are registered yet. Invite freelancers to sign up first.',
+                structured: { matches: [], notes: '' },
+            },
+        });
+    }
+
+    const rosterJson = JSON.stringify(
+        freelancers.map((f) => ({
+            freelancerId: f.id,
+            displayName: f.name,
+            trustScore: f.trustScore,
+            scopeDiscipline: f.scopeDiscipline,
+            scopeCreepIndex: f.scopeCreepIndex,
+            disputeRatio: f.disputeRatio,
+            trustVelocity: f.trustVelocity,
+        }))
+    );
+
+    const userContent = `PROJECT BRIEF FROM CLIENT:\n${brief}\n\nFREELANCER_ROSTER_JSON:\n${rosterJson}`;
+
+    try {
+        const text = await generateGeminiText({
+            apiKey: key,
+            systemPrompt: MAYA_SYSTEM.match,
+            messages: [{ role: 'user', content: userContent }],
+            jsonMode: true,
+        });
+
+        let structured: { matches?: unknown[]; notes?: string } = {};
+        try {
+            structured = JSON.parse(text) as typeof structured;
+        } catch {
+            structured = {};
+        }
+
+        const ids = new Set(freelancers.map((f) => f.id));
+        const rawMatches = Array.isArray(structured.matches) ? structured.matches : [];
+        const enriched = rawMatches
+            .filter((m: unknown) => {
+                const row = m as { freelancerId?: number };
+                return typeof row?.freelancerId === 'number' && ids.has(row.freelancerId);
+            })
+            .map((m: unknown) => {
+                const row = m as {
+                    freelancerId: number;
+                    score?: number;
+                    summary?: string;
+                    fitReasons?: string[];
+                };
+                const f = freelancers.find((x) => x.id === row.freelancerId)!;
+                return {
+                    freelancer: f,
+                    score: row.score ?? 0,
+                    summary: row.summary ?? '',
+                    fitReasons: Array.isArray(row.fitReasons) ? row.fitReasons : [],
+                };
+            });
+
+        return c.json({
+            success: true,
+            data: {
+                mode: 'match',
+                reply: text,
+                structured: { matches: enriched, notes: structured.notes ?? '' },
+            },
+        });
+    } catch (e) {
+        const msg = e instanceof Error ? e.message : 'Gemini request failed';
+        return c.json({ success: false, message: msg }, 502);
+    }
 });
 
 // ─── Export for Cloudflare Pages ────────────────────────────

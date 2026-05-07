@@ -11,6 +11,8 @@ export const users = sqliteTable('users', {
     scopeCreepIndex: integer('scopeCreepIndex').default(0),
     disputeRatio: integer('disputeRatio').default(0),
     trustVelocity: integer('trustVelocity').default(0),
+    dailyGigMode: integer('dailyGigMode', { mode: 'boolean' }).default(false),
+    skillsJson: text('skillsJson', { mode: 'json' }).$type<string[]>().default([]),
     createdAt: integer('createdAt', { mode: 'timestamp' }).$defaultFn(() => new Date()),
     updatedAt: integer('updatedAt', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });
@@ -79,5 +81,41 @@ export const changeRequests = sqliteTable('change_requests', {
     priceAdjustment: integer('priceAdjustment').default(0),
     timelineAdjustment: integer('timelineAdjustment').default(0),
     approved: integer('approved', { mode: 'boolean' }).default(false),
+    createdAt: integer('createdAt', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});
+
+/** Client-posted instant gig broadcast to freelancers in Daily Gig Mode */
+export const dailyGigs = sqliteTable('daily_gigs', {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    clientId: integer('clientId').references(() => users.id).notNull(),
+    title: text('title').notNull(),
+    budget: text('budget').notNull(),
+    duration: text('duration').notNull(),
+    requiredSkills: text('requiredSkills', { mode: 'json' }).$type<string[]>().default([]),
+    description: text('description'),
+    status: text('status', { enum: ['open', 'filled', 'cancelled'] }).default('open').notNull(),
+    acceptedFreelancerId: integer('acceptedFreelancerId').references(() => users.id),
+    createdAt: integer('createdAt', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+    updatedAt: integer('updatedAt', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+});
+
+/** One row per freelancer targeted for a gig */
+export const gigOffers = sqliteTable('gig_offers', {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    gigId: integer('gigId').references(() => dailyGigs.id).notNull(),
+    freelancerId: integer('freelancerId').references(() => users.id).notNull(),
+    status: text('status', { enum: ['pending', 'accepted', 'rejected'] }).default('pending').notNull(),
+    createdAt: integer('createdAt', { mode: 'timestamp' }).$defaultFn(() => new Date()),
+}, (table) => ({
+    gigOfferUnique: uniqueIndex('gig_offer_unique').on(table.gigId, table.freelancerId),
+}));
+
+/** Popup queue for recruiter when a freelancer accepts */
+export const gigRecruiterAlerts = sqliteTable('gig_recruiter_alerts', {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    clientId: integer('clientId').references(() => users.id).notNull(),
+    gigId: integer('gigId').references(() => dailyGigs.id).notNull(),
+    freelancerId: integer('freelancerId').references(() => users.id).notNull(),
+    read: integer('read', { mode: 'boolean' }).default(false).notNull(),
     createdAt: integer('createdAt', { mode: 'timestamp' }).$defaultFn(() => new Date()),
 });

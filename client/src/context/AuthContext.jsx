@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
+import React, { createContext, useState, useEffect, useContext, useCallback } from 'react';
 import { authAPI } from '../services/api';
 
 const AuthContext = createContext();
@@ -13,16 +13,33 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const logout = useCallback(() => {
+        localStorage.removeItem('token');
+        setToken(null);
+        setUser(null);
+    }, []);
+
+    const refreshUser = useCallback(async () => {
+        const t = localStorage.getItem('token');
+        if (!t) return null;
+        try {
+            const res = await authAPI.getMe();
+            setUser(res.data);
+            return res.data;
+        } catch {
+            return null;
+        }
+    }, []);
+
     // Load user data if token exists
     useEffect(() => {
         const loadUser = async () => {
             if (token) {
                 try {
-                    // Verify token and fetch user
                     const res = await authAPI.getMe();
                     setUser(res.data);
                 } catch (err) {
-                    console.error("Token invalid or expired", err);
+                    console.error('Token invalid or expired', err);
                     logout();
                 }
             }
@@ -30,7 +47,7 @@ export const AuthProvider = ({ children }) => {
         };
 
         loadUser();
-    }, [token]);
+    }, [token, logout]);
 
     const login = async (email, password) => {
         setError(null);
@@ -94,12 +111,6 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const logout = () => {
-        localStorage.removeItem('token');
-        setToken(null);
-        setUser(null);
-    };
-
     const value = {
         user,
         token,
@@ -108,7 +119,8 @@ export const AuthProvider = ({ children }) => {
         login,
         register,
         logout,
-        isAuthenticated: !!user
+        refreshUser,
+        isAuthenticated: !!user,
     };
 
     return (

@@ -5,6 +5,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 
 // Components
 import Navbar from './components/Navbar';
+import DailyGigLiveLayer from './components/DailyGigLiveLayer';
 
 // Pages
 import LandingPage from './pages/LandingPage';
@@ -16,6 +17,7 @@ import ProfilePage from './pages/ProfilePage';
 import FreelancersPage from './pages/FreelancersPage';
 import FreelancerProfilePage from './pages/FreelancerProfilePage';
 import MessagesPage from './pages/MessagesPage';
+import MayaPage from './pages/MayaPage';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -38,7 +40,7 @@ function App() {
     <AuthProvider>
       <Router>
         <Navbar />
-        <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <main className="ind-app-main">
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
@@ -96,10 +98,20 @@ function App() {
               }
             />
 
+            <Route
+              path="/maya"
+              element={
+                <ProtectedRoute>
+                  <MayaPage />
+                </ProtectedRoute>
+              }
+            />
+
             {/* Fallback pattern */}
             <Route path="*" element={<Navigate to="/" />} />
           </Routes>
         </main>
+        <DailyGigLiveLayer />
         <Toaster
           position="top-right"
           toastOptions={{

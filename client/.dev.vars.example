@@ -1,0 +1,6 @@
+# Copy this file to .dev.vars in this folder (next to wrangler.toml). .dev.vars is gitignored.
+# GEMINI_API_KEY must be NON-EMPTY — empty `GEMINI_API_KEY=` WILL cause MAYA HTTP 503.
+# Keys from repo-root .env are ignored by Workers.
+
+JWT_SECRET=your_jwt_secret_for_local_dev
+GEMINI_API_KEY=paste_gemini_api_key_here_no_quotes

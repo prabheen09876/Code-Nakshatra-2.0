@@ -1,0 +1,160 @@
+/* Mobile-first instant gig swipe sheet (Daily Gig Mode) */
+
+.daily-gig-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10090;
+  padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+@media (min-width: 640px) {
+  .daily-gig-overlay {
+    justify-content: center;
+    align-items: center;
+    padding: max(12px, env(safe-area-inset-top));
+  }
+}
+
+.daily-gig-sheet {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto;
+  align-self: stretch;
+}
+
+@media (min-width: 640px) {
+  .daily-gig-sheet {
+    align-self: center;
+    padding: 16px;
+  }
+}
+
+.daily-gig-timer {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.daily-gig-timer__bar {
+  height: 100%;
+  transform-origin: left center;
+  background: linear-gradient(90deg, #f97316, #eab308);
+  border-radius: 2px;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes daily-gig-timer-shrink {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
+
+.daily-gig-swipe-track {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  min-height: min(82vh, 540px);
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 640px) {
+  .daily-gig-swipe-track {
+    min-height: auto;
+    max-height: 85vh;
+  }
+}
+
+.daily-gig-swipe-hints {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.daily-gig-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(10px, 2.9vw, 12px);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  opacity: 0.06;
+  transition: opacity 0.12s ease;
+}
+
+.daily-gig-hint--reject {
+  background: radial-gradient(circle at 20% 45%, rgba(239, 68, 68, 0.9), transparent 75%);
+}
+
+.daily-gig-hint--accept {
+  background: radial-gradient(circle at 80% 45%, rgba(249, 115, 22, 0.9), transparent 75%);
+}
+
+.daily-gig-hint--reject.is-active {
+  opacity: 1;
+}
+
+.daily-gig-hint--accept.is-active {
+  opacity: 1;
+}
+
+.daily-gig-swipe-card-wrap {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  touch-action: none;
+}
+
+.daily-gig-swipe-card {
+  flex: 1;
+  align-self: flex-end;
+  width: 100%;
+  padding: clamp(12px, 3.5vw, 18px) clamp(12px, 4vw, 20px);
+  background: linear-gradient(180deg, #1f1f23 0%, #141418 100%);
+  border-top: 2px solid #f97316;
+  border-left: 1px solid rgba(255, 255, 255, 0.08);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px 16px 0 0;
+  box-shadow: 0 -12px 48px rgba(0, 0, 0, 0.45);
+}
+
+@media (min-width: 640px) {
+  .daily-gig-swipe-card {
+    align-self: center;
+    border-radius: 16px;
+    border: 2px solid #f97316;
+    max-height: 85vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+.daily-gig-swipe-card--spring {
+  transition: transform 0.22s cubic-bezier(0.34, 1.3, 0.64, 1);
+}
+
+.daily-gig-pill-help {
+  text-align: center;
+  font-size: clamp(9px, 2.8vw, 11px);
+  letter-spacing: 0.06em;
+  color: rgba(226, 226, 226, 0.55);
+  margin-top: 8px;
+  text-transform: none;
+}

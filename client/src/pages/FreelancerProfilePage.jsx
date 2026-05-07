@@ -55,6 +55,16 @@ const FreelancerProfilePage = () => {
     const profileId = profile._id ?? profile.id;
     const shortId = profileId ? String(profileId).slice(-6) : '';
 
+    let skillTags = [];
+    try {
+        const sj = profile.skillsJson;
+        if (Array.isArray(sj)) skillTags = sj.map(String).filter(Boolean);
+        else if (typeof sj === 'string') skillTags = JSON.parse(sj || '[]');
+    } catch {
+        skillTags = [];
+    }
+    const isAvailable = profile.dailyGigMode === true || profile.dailyGigMode === 1;
+
     return (
         <div className="ind-page">
             <div className="ind-page-inner" style={{ maxWidth: 720 }}>
@@ -76,8 +86,11 @@ const FreelancerProfilePage = () => {
                         <div>
                             <div className="ind-page-sys-label">SYS_OPERATOR // FREELANCER_PROFILE</div>
                             <h1 style={{ fontSize: '1.75rem', fontWeight: 900, color: '#111', marginBottom: '0.25rem' }}>{profile.name}</h1>
-                            <div style={{ fontSize: '0.65rem', color: '#888', letterSpacing: '0.1em' }}>
+                            <div style={{ fontSize: '0.65rem', color: '#888', letterSpacing: '0.1em', marginBottom: 6 }}>
                                 FREELANCER · ID_{shortId}
+                                {isAvailable && (
+                                    <span style={{ color: '#059669', fontWeight: 800, marginLeft: 12 }}>● AVAILABLE_NOW</span>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -111,6 +124,29 @@ const FreelancerProfilePage = () => {
                         <div className="ind-metric-sub">HISTORICAL_SHIFTS</div>
                     </motion.div>
                 </div>
+
+                {skillTags.length > 0 && (
+                    <>
+                        <div style={{ fontSize: '0.65rem', color: '#888', letterSpacing: '0.15em', margin: '1rem 0 0.5rem' }}>// SKILL_TAGS</div>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: '1rem' }}>
+                            {skillTags.map((s, i) => (
+                                <span
+                                    key={i}
+                                    style={{
+                                        fontSize: '0.72rem',
+                                        padding: '0.2rem 0.5rem',
+                                        borderRadius: 999,
+                                        background: '#fff',
+                                        border: '1px solid #ddd',
+                                        color: '#111',
+                                    }}
+                                >
+                                    {s}
+                                </span>
+                            ))}
+                        </div>
+                    </>
+                )}
 
                 {user?.role === 'client' && projects.length > 0 && (
                     <>
