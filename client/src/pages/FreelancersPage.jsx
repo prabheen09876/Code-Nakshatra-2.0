@@ -83,7 +83,25 @@ const FreelancersPage = () => {
                                         <User size={20} />
                                     </div>
                                     <div>
-                                        <div style={{ fontSize: '0.9rem', fontWeight: 900, color: '#111', marginBottom: '0.25rem' }}>{f.name}</div>
+                                        <div style={{ fontSize: '0.9rem', fontWeight: 900, color: '#111', marginBottom: '0.25rem', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                                            {f.name}
+                                            {f.availabilityStatus === 'Available Now' && (
+                                                <span
+                                                    style={{
+                                                        fontSize: '0.56rem',
+                                                        fontWeight: 800,
+                                                        letterSpacing: '0.08em',
+                                                        color: '#059669',
+                                                        border: '1px solid rgba(5,150,105,0.45)',
+                                                        padding: '0.15rem 0.35rem',
+                                                        borderRadius: 4,
+                                                        background: 'rgba(5,150,105,0.08)',
+                                                    }}
+                                                >
+                                                    ● AVAILABLE NOW
+                                                </span>
+                                            )}
+                                        </div>
                                         <div style={{ fontSize: '0.65rem', color: '#888', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                             <Shield size={12} />
                                             TRUST: <span style={{ color: '#FF7A00', fontWeight: 700 }}>{f.trustScore ?? '—'}</span>

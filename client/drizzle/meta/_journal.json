@@ -8,6 +8,13 @@
       "when": 1775196342713,
       "tag": "0000_tan_wiccan",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1775200000000,
+      "tag": "0001_daily_gig",
+      "breakpoints": true
     }
   ]
 }

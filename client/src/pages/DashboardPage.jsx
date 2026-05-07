@@ -3,16 +3,19 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { projectAPI } from '../services/api';
-import { Plus, FolderOpen, Shield, TrendingUp, AlertTriangle, ArrowRight } from 'lucide-react';
+import { Plus, FolderOpen, Shield, TrendingUp, AlertTriangle, ArrowRight, Radio } from 'lucide-react';
 import CreateProjectModal from '../components/CreateProjectModal';
+import PostDailyGigModal from '../components/PostDailyGigModal';
 
 const DashboardPage = () => {
     const { user } = useAuth();
     const isFreelancer = user.role === 'freelancer';
+    const isClient = user.role === 'client';
 
     const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [postGigOpen, setPostGigOpen] = useState(false);
 
     useEffect(() => {
         const fetchProjects = async () => {
@@ -68,11 +71,18 @@ const DashboardPage = () => {
                         <p className="ind-page-sub">Take control of your projects and trust metrics.</p>
                     </div>
                     {isFreelancer && (
-                        <button
-                            className="ind-btn ind-btn-orange"
-                            onClick={() => setIsModalOpen(true)}
-                        >
+                        <button className="ind-btn ind-btn-orange" onClick={() => setIsModalOpen(true)}>
                             <Plus size={16} /> NEW_PROJECT
+                        </button>
+                    )}
+                    {isClient && (
+                        <button
+                            type="button"
+                            className="ind-btn ind-btn-black"
+                            onClick={() => setPostGigOpen(true)}
+                            style={{ gap: 8 }}
+                        >
+                            <Radio size={16} /> POST_INSTANT_GIG
                         </button>
                     )}
                 </div>
@@ -201,11 +211,8 @@ const DashboardPage = () => {
                     </div>
                 )}
 
-                <CreateProjectModal
-                    isOpen={isModalOpen}
-                    onClose={() => setIsModalOpen(false)}
-                    onProjectCreated={handleProjectCreated}
-                />
+                <CreateProjectModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onProjectCreated={handleProjectCreated} />
+                <PostDailyGigModal isOpen={postGigOpen} onClose={() => setPostGigOpen(false)} />
             </div>
         </div>
     );

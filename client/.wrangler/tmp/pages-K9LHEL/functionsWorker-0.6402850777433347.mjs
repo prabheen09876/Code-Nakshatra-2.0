@@ -32,7 +32,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 
-// ../.wrangler/tmp/bundle-RRzLnu/checked-fetch.js
+// ../.wrangler/tmp/bundle-NKjyYF/checked-fetch.js
 function checkURL(request, init) {
   const url = request instanceof URL ? request : new URL(
     (typeof request === "string" ? new Request(request, init) : request).url
@@ -50,7 +50,7 @@ function checkURL(request, init) {
 }
 var urls;
 var init_checked_fetch = __esm({
-  "../.wrangler/tmp/bundle-RRzLnu/checked-fetch.js"() {
+  "../.wrangler/tmp/bundle-NKjyYF/checked-fetch.js"() {
     urls = /* @__PURE__ */ new Set();
     __name(checkURL, "checkURL");
     globalThis.fetch = new Proxy(globalThis.fetch, {
@@ -67,7 +67,7 @@ var init_checked_fetch = __esm({
 var compose;
 var init_compose = __esm({
   "../node_modules/hono/dist/compose.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     compose = /* @__PURE__ */ __name((middleware, onError, onNotFound) => {
       return (context, next) => {
@@ -118,7 +118,7 @@ var init_compose = __esm({
 // ../node_modules/hono/dist/http-exception.js
 var init_http_exception = __esm({
   "../node_modules/hono/dist/http-exception.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
   }
 });
@@ -127,7 +127,7 @@ var init_http_exception = __esm({
 var GET_MATCH_RESULT;
 var init_constants = __esm({
   "../node_modules/hono/dist/request/constants.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     GET_MATCH_RESULT = /* @__PURE__ */ Symbol();
   }
@@ -165,7 +165,7 @@ function convertFormDataToBodyData(formData, options) {
 var parseBody, handleParsingAllValues, handleParsingNestedValues;
 var init_body = __esm({
   "../node_modules/hono/dist/utils/body.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_request();
     parseBody = /* @__PURE__ */ __name(async (request, options = /* @__PURE__ */ Object.create(null)) => {
@@ -219,7 +219,7 @@ var init_body = __esm({
 var splitPath, splitRoutingPath, extractGroupsFromPath, replaceGroupMarks, patternCache, getPattern, tryDecode, tryDecodeURI, getPath, getPathNoStrict, mergePath, checkOptionalParameter, _decodeURI, _getQueryParam, getQueryParam, getQueryParams, decodeURIComponent_;
 var init_url = __esm({
   "../node_modules/hono/dist/utils/url.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     splitPath = /* @__PURE__ */ __name((path) => {
       const paths = path.split("/");
@@ -430,7 +430,7 @@ var init_url = __esm({
 var tryDecodeURIComponent, HonoRequest;
 var init_request = __esm({
   "../node_modules/hono/dist/request.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_http_exception();
     init_constants();
@@ -712,7 +712,7 @@ var init_request = __esm({
 var HtmlEscapedCallbackPhase, raw, resolveCallback;
 var init_html = __esm({
   "../node_modules/hono/dist/utils/html.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     HtmlEscapedCallbackPhase = {
       Stringify: 1,
@@ -761,7 +761,7 @@ var init_html = __esm({
 var TEXT_PLAIN, setDefaultContentType, createResponseInstance, Context;
 var init_context = __esm({
   "../node_modules/hono/dist/context.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_request();
     init_html();
@@ -1180,7 +1180,7 @@ var init_context = __esm({
 var METHOD_NAME_ALL, METHOD_NAME_ALL_LOWERCASE, METHODS, MESSAGE_MATCHER_IS_ALREADY_BUILT, UnsupportedPathError;
 var init_router = __esm({
   "../node_modules/hono/dist/router.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     METHOD_NAME_ALL = "ALL";
     METHOD_NAME_ALL_LOWERCASE = "all";
@@ -1198,7 +1198,7 @@ var init_router = __esm({
 var COMPOSED_HANDLER;
 var init_constants2 = __esm({
   "../node_modules/hono/dist/utils/constants.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     COMPOSED_HANDLER = "__COMPOSED_HANDLER";
   }
@@ -1208,7 +1208,7 @@ var init_constants2 = __esm({
 var notFoundHandler, errorHandler, Hono;
 var init_hono_base = __esm({
   "../node_modules/hono/dist/hono-base.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_compose();
     init_context();
@@ -1612,7 +1612,7 @@ function match(method, path) {
 var emptyParam;
 var init_matcher = __esm({
   "../node_modules/hono/dist/router/reg-exp-router/matcher.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_router();
     emptyParam = [];
@@ -1643,7 +1643,7 @@ function compareKey(a, b) {
 var LABEL_REG_EXP_STR, ONLY_WILDCARD_REG_EXP_STR, TAIL_WILDCARD_REG_EXP_STR, PATH_ERROR, regExpMetaChars, Node;
 var init_node = __esm({
   "../node_modules/hono/dist/router/reg-exp-router/node.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     LABEL_REG_EXP_STR = "[^/]+";
     ONLY_WILDCARD_REG_EXP_STR = ".*";
@@ -1743,7 +1743,7 @@ var init_node = __esm({
 var Trie;
 var init_trie = __esm({
   "../node_modules/hono/dist/router/reg-exp-router/trie.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_node();
     Trie = class {
@@ -1889,7 +1889,7 @@ function findMiddleware(middleware, path) {
 var nullMatcher, wildcardRegExpCache, RegExpRouter;
 var init_router2 = __esm({
   "../node_modules/hono/dist/router/reg-exp-router/router.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_router();
     init_url();
@@ -2007,7 +2007,7 @@ var init_router2 = __esm({
 // ../node_modules/hono/dist/router/reg-exp-router/prepared-router.js
 var init_prepared_router = __esm({
   "../node_modules/hono/dist/router/reg-exp-router/prepared-router.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_router();
     init_matcher();
@@ -2018,7 +2018,7 @@ var init_prepared_router = __esm({
 // ../node_modules/hono/dist/router/reg-exp-router/index.js
 var init_reg_exp_router = __esm({
   "../node_modules/hono/dist/router/reg-exp-router/index.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_router2();
     init_prepared_router();
@@ -2029,7 +2029,7 @@ var init_reg_exp_router = __esm({
 var SmartRouter;
 var init_router3 = __esm({
   "../node_modules/hono/dist/router/smart-router/router.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_router();
     SmartRouter = class {
@@ -2094,7 +2094,7 @@ var init_router3 = __esm({
 // ../node_modules/hono/dist/router/smart-router/index.js
 var init_smart_router = __esm({
   "../node_modules/hono/dist/router/smart-router/index.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_router3();
   }
@@ -2104,7 +2104,7 @@ var init_smart_router = __esm({
 var emptyParams, hasChildren, Node2;
 var init_node2 = __esm({
   "../node_modules/hono/dist/router/trie-router/node.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_router();
     init_url();
@@ -2291,7 +2291,7 @@ var init_node2 = __esm({
 var TrieRouter;
 var init_router4 = __esm({
   "../node_modules/hono/dist/router/trie-router/router.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_url();
     init_node2();
@@ -2324,7 +2324,7 @@ var init_router4 = __esm({
 // ../node_modules/hono/dist/router/trie-router/index.js
 var init_trie_router = __esm({
   "../node_modules/hono/dist/router/trie-router/index.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_router4();
   }
@@ -2334,7 +2334,7 @@ var init_trie_router = __esm({
 var Hono2;
 var init_hono = __esm({
   "../node_modules/hono/dist/hono.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_hono_base();
     init_reg_exp_router();
@@ -2362,7 +2362,7 @@ var init_hono = __esm({
 // ../node_modules/hono/dist/index.js
 var init_dist = __esm({
   "../node_modules/hono/dist/index.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_hono();
   }
@@ -2372,7 +2372,7 @@ var init_dist = __esm({
 var handle;
 var init_handler = __esm({
   "../node_modules/hono/dist/adapter/cloudflare-pages/handler.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_context();
     init_http_exception();
@@ -2393,7 +2393,7 @@ var init_handler = __esm({
 // ../node_modules/hono/dist/adapter/cloudflare-pages/conninfo.js
 var init_conninfo = __esm({
   "../node_modules/hono/dist/adapter/cloudflare-pages/conninfo.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
   }
 });
@@ -2401,7 +2401,7 @@ var init_conninfo = __esm({
 // ../node_modules/hono/dist/adapter/cloudflare-pages/index.js
 var init_cloudflare_pages = __esm({
   "../node_modules/hono/dist/adapter/cloudflare-pages/index.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_handler();
     init_conninfo();
@@ -2435,7 +2435,7 @@ function is(value, type) {
 var entityKind;
 var init_entity = __esm({
   "../node_modules/drizzle-orm/entity.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     entityKind = /* @__PURE__ */ Symbol.for("drizzle:entityKind");
     __name(is, "is");
@@ -2446,7 +2446,7 @@ var init_entity = __esm({
 var ConsoleLogWriter, DefaultLogger, NoopLogger;
 var init_logger = __esm({
   "../node_modules/drizzle-orm/logger.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     ConsoleLogWriter = class {
@@ -2494,7 +2494,7 @@ var init_logger = __esm({
 var TableName;
 var init_table_utils = __esm({
   "../node_modules/drizzle-orm/table.utils.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     TableName = /* @__PURE__ */ Symbol.for("drizzle:Name");
   }
@@ -2510,7 +2510,7 @@ function getTableUniqueName(table) {
 var Schema, Columns, ExtraConfigColumns, OriginalName, BaseName, IsAlias, ExtraConfigBuilder, IsDrizzleTable, Table;
 var init_table = __esm({
   "../node_modules/drizzle-orm/table.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_table_utils();
@@ -2580,7 +2580,7 @@ var init_table = __esm({
 var Column;
 var init_column = __esm({
   "../node_modules/drizzle-orm/column.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     Column = class {
@@ -2642,7 +2642,7 @@ var init_column = __esm({
 var ColumnBuilder;
 var init_column_builder = __esm({
   "../node_modules/drizzle-orm/column-builder.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     ColumnBuilder = class {
@@ -2756,7 +2756,7 @@ var init_column_builder = __esm({
 var ForeignKeyBuilder, ForeignKey;
 var init_foreign_keys = __esm({
   "../node_modules/drizzle-orm/pg-core/foreign-keys.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_table_utils();
@@ -2830,7 +2830,7 @@ function iife(fn, ...args) {
 }
 var init_tracing_utils = __esm({
   "../node_modules/drizzle-orm/tracing-utils.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     __name(iife, "iife");
   }
@@ -2843,7 +2843,7 @@ function uniqueKeyName(table, columns) {
 var UniqueConstraintBuilder, UniqueOnConstraintBuilder, UniqueConstraint;
 var init_unique_constraint = __esm({
   "../node_modules/drizzle-orm/pg-core/unique-constraint.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_table_utils();
@@ -2982,7 +2982,7 @@ function makePgArray(array) {
 }
 var init_array = __esm({
   "../node_modules/drizzle-orm/pg-core/utils/array.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     __name(parsePgArrayValue, "parsePgArrayValue");
     __name(parsePgNestedArray, "parsePgNestedArray");
@@ -2995,7 +2995,7 @@ var init_array = __esm({
 var PgColumnBuilder, PgColumn, ExtraConfigColumn, IndexedColumn, PgArrayBuilder, PgArray;
 var init_common = __esm({
   "../node_modules/drizzle-orm/pg-core/columns/common.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_column_builder();
     init_column();
@@ -3214,7 +3214,7 @@ function isPgEnum(obj) {
 var PgEnumObjectColumnBuilder, PgEnumObjectColumn, isPgEnumSym, PgEnumColumnBuilder, PgEnumColumn;
 var init_enum = __esm({
   "../node_modules/drizzle-orm/pg-core/columns/enum.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_common();
@@ -3291,7 +3291,7 @@ var init_enum = __esm({
 var Subquery, WithSubquery;
 var init_subquery = __esm({
   "../node_modules/drizzle-orm/subquery.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     Subquery = class {
@@ -3326,7 +3326,7 @@ var init_subquery = __esm({
 var version;
 var init_version = __esm({
   "../node_modules/drizzle-orm/version.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     version = "0.45.2";
   }
@@ -3336,7 +3336,7 @@ var init_version = __esm({
 var otel, rawTracer, tracer;
 var init_tracing = __esm({
   "../node_modules/drizzle-orm/tracing.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_tracing_utils();
     init_version();
@@ -3378,7 +3378,7 @@ var init_tracing = __esm({
 var ViewBaseConfig;
 var init_view_common = __esm({
   "../node_modules/drizzle-orm/view-common.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     ViewBaseConfig = /* @__PURE__ */ Symbol.for("drizzle:ViewBaseConfig");
   }
@@ -3435,7 +3435,7 @@ function fillPlaceholders(params, values) {
 var FakePrimitiveParam, StringChunk, SQL, Name, noopDecoder, noopEncoder, noopMapper, Param, Placeholder, IsDrizzleView, View;
 var init_sql = __esm({
   "../node_modules/drizzle-orm/sql/sql.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_enum();
@@ -3945,7 +3945,7 @@ function getColumnNameAndConfig(a, b) {
 var textDecoder;
 var init_utils = __esm({
   "../node_modules/drizzle-orm/utils.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_column();
     init_entity();
@@ -3969,7 +3969,7 @@ var init_utils = __esm({
 var InlineForeignKeys, EnableRLS, PgTable;
 var init_table2 = __esm({
   "../node_modules/drizzle-orm/pg-core/table.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_table();
@@ -4001,7 +4001,7 @@ var init_table2 = __esm({
 var PrimaryKeyBuilder, PrimaryKey;
 var init_primary_keys = __esm({
   "../node_modules/drizzle-orm/pg-core/primary-keys.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_table2();
@@ -4141,7 +4141,7 @@ function notIlike(column, value) {
 var eq, ne, gt, gte, lt, lte;
 var init_conditions = __esm({
   "../node_modules/drizzle-orm/sql/expressions/conditions.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_column();
     init_entity();
@@ -4193,7 +4193,7 @@ function desc(column) {
 }
 var init_select = __esm({
   "../node_modules/drizzle-orm/sql/expressions/select.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_sql();
     __name(asc, "asc");
@@ -4204,7 +4204,7 @@ var init_select = __esm({
 // ../node_modules/drizzle-orm/sql/expressions/index.js
 var init_expressions = __esm({
   "../node_modules/drizzle-orm/sql/expressions/index.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_conditions();
     init_select();
@@ -4422,7 +4422,7 @@ function mapRelationalRow(tablesConfig, tableConfig, row, buildQueryResultSelect
 var Relation, Relations, One, Many;
 var init_relations = __esm({
   "../node_modules/drizzle-orm/relations.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_table();
     init_column();
@@ -4535,7 +4535,7 @@ function mapColumnsInSQLToAlias(query, alias) {
 var ColumnAliasProxyHandler, TableAliasProxyHandler, RelationTableAliasProxyHandler;
 var init_alias = __esm({
   "../node_modules/drizzle-orm/alias.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_column();
     init_entity();
@@ -4630,7 +4630,7 @@ var init_alias = __esm({
 var SelectionProxyHandler;
 var init_selection_proxy = __esm({
   "../node_modules/drizzle-orm/selection-proxy.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_alias();
     init_column();
@@ -4714,7 +4714,7 @@ var init_selection_proxy = __esm({
 var QueryPromise;
 var init_query_promise = __esm({
   "../node_modules/drizzle-orm/query-promise.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     QueryPromise = class {
@@ -4749,7 +4749,7 @@ var init_query_promise = __esm({
 var ForeignKeyBuilder2, ForeignKey2;
 var init_foreign_keys2 = __esm({
   "../node_modules/drizzle-orm/sqlite-core/foreign-keys.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_table_utils();
@@ -4824,7 +4824,7 @@ function uniqueKeyName2(table, columns) {
 var UniqueConstraintBuilder2, UniqueOnConstraintBuilder2, UniqueConstraint2;
 var init_unique_constraint2 = __esm({
   "../node_modules/drizzle-orm/sqlite-core/unique-constraint.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_table_utils();
@@ -4882,7 +4882,7 @@ var init_unique_constraint2 = __esm({
 var SQLiteColumnBuilder, SQLiteColumn;
 var init_common2 = __esm({
   "../node_modules/drizzle-orm/sqlite-core/columns/common.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_column_builder();
     init_column();
@@ -4961,7 +4961,7 @@ function blob(a, b) {
 var SQLiteBigIntBuilder, SQLiteBigInt, SQLiteBlobJsonBuilder, SQLiteBlobJson, SQLiteBlobBufferBuilder, SQLiteBlobBuffer;
 var init_blob = __esm({
   "../node_modules/drizzle-orm/sqlite-core/columns/blob.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_utils();
@@ -5079,7 +5079,7 @@ function customType(customTypeParams) {
 var SQLiteCustomColumnBuilder, SQLiteCustomColumn;
 var init_custom = __esm({
   "../node_modules/drizzle-orm/sqlite-core/columns/custom.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_utils();
@@ -5144,7 +5144,7 @@ function integer(a, b) {
 var SQLiteBaseIntegerBuilder, SQLiteBaseInteger, SQLiteIntegerBuilder, SQLiteInteger, SQLiteTimestampBuilder, SQLiteTimestamp, SQLiteBooleanBuilder, SQLiteBoolean;
 var init_integer = __esm({
   "../node_modules/drizzle-orm/sqlite-core/columns/integer.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_sql();
@@ -5284,7 +5284,7 @@ function numeric(a, b) {
 var SQLiteNumericBuilder, SQLiteNumeric, SQLiteNumericNumberBuilder, SQLiteNumericNumber, SQLiteNumericBigIntBuilder, SQLiteNumericBigInt;
 var init_numeric = __esm({
   "../node_modules/drizzle-orm/sqlite-core/columns/numeric.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_utils();
@@ -5386,7 +5386,7 @@ function real(name) {
 var SQLiteRealBuilder, SQLiteReal;
 var init_real = __esm({
   "../node_modules/drizzle-orm/sqlite-core/columns/real.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_common2();
@@ -5427,7 +5427,7 @@ function text(a, b = {}) {
 var SQLiteTextBuilder, SQLiteText, SQLiteTextJsonBuilder, SQLiteTextJson;
 var init_text = __esm({
   "../node_modules/drizzle-orm/sqlite-core/columns/text.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_utils();
@@ -5512,7 +5512,7 @@ function getSQLiteColumnBuilders() {
 }
 var init_all = __esm({
   "../node_modules/drizzle-orm/sqlite-core/columns/all.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_blob();
     init_custom();
@@ -5548,7 +5548,7 @@ function sqliteTableBase(name, columns, extraConfig, schema, baseName = name) {
 var InlineForeignKeys2, SQLiteTable, sqliteTable;
 var init_table3 = __esm({
   "../node_modules/drizzle-orm/sqlite-core/table.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_table();
@@ -5581,7 +5581,7 @@ var init_table3 = __esm({
 var CheckBuilder, Check;
 var init_checks = __esm({
   "../node_modules/drizzle-orm/sqlite-core/checks.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     CheckBuilder = class {
@@ -5621,7 +5621,7 @@ function uniqueIndex(name) {
 var IndexBuilderOn, IndexBuilder, Index;
 var init_indexes = __esm({
   "../node_modules/drizzle-orm/sqlite-core/indexes.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     IndexBuilderOn = class {
@@ -5682,7 +5682,7 @@ var init_indexes = __esm({
 var PrimaryKeyBuilder2, PrimaryKey2;
 var init_primary_keys2 = __esm({
   "../node_modules/drizzle-orm/sqlite-core/primary-keys.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_table3();
@@ -5738,7 +5738,7 @@ function extractUsedTable(table) {
 }
 var init_utils2 = __esm({
   "../node_modules/drizzle-orm/sqlite-core/utils.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_sql();
@@ -5753,7 +5753,7 @@ var init_utils2 = __esm({
 var SQLiteDeleteBase;
 var init_delete = __esm({
   "../node_modules/drizzle-orm/sqlite-core/query-builders/delete.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_query_promise();
@@ -5898,7 +5898,7 @@ function noopCase(input) {
 var CasingCache;
 var init_casing = __esm({
   "../node_modules/drizzle-orm/casing.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_table();
@@ -5951,7 +5951,7 @@ var init_casing = __esm({
 var DrizzleError, DrizzleQueryError, TransactionRollbackError;
 var init_errors = __esm({
   "../node_modules/drizzle-orm/errors.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     DrizzleError = class extends Error {
@@ -5994,7 +5994,7 @@ params: ${params}`);
 // ../node_modules/drizzle-orm/sql/functions/aggregate.js
 var init_aggregate = __esm({
   "../node_modules/drizzle-orm/sql/functions/aggregate.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
   }
 });
@@ -6002,7 +6002,7 @@ var init_aggregate = __esm({
 // ../node_modules/drizzle-orm/sql/functions/vector.js
 var init_vector = __esm({
   "../node_modules/drizzle-orm/sql/functions/vector.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
   }
 });
@@ -6010,7 +6010,7 @@ var init_vector = __esm({
 // ../node_modules/drizzle-orm/sql/functions/index.js
 var init_functions = __esm({
   "../node_modules/drizzle-orm/sql/functions/index.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_aggregate();
     init_vector();
@@ -6020,7 +6020,7 @@ var init_functions = __esm({
 // ../node_modules/drizzle-orm/sql/index.js
 var init_sql2 = __esm({
   "../node_modules/drizzle-orm/sql/index.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_expressions();
     init_functions();
@@ -6031,7 +6031,7 @@ var init_sql2 = __esm({
 // ../node_modules/drizzle-orm/sqlite-core/columns/index.js
 var init_columns = __esm({
   "../node_modules/drizzle-orm/sqlite-core/columns/index.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_blob();
     init_common2();
@@ -6047,7 +6047,7 @@ var init_columns = __esm({
 var SQLiteViewBase;
 var init_view_base = __esm({
   "../node_modules/drizzle-orm/sqlite-core/view-base.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_sql();
@@ -6064,7 +6064,7 @@ var init_view_base = __esm({
 var SQLiteDialect, SQLiteSyncDialect, SQLiteAsyncDialect;
 var init_dialect = __esm({
   "../node_modules/drizzle-orm/sqlite-core/dialect.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_alias();
     init_casing();
@@ -6785,7 +6785,7 @@ var init_dialect = __esm({
 var TypedQueryBuilder;
 var init_query_builder = __esm({
   "../node_modules/drizzle-orm/query-builders/query-builder.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     TypedQueryBuilder = class {
@@ -6822,7 +6822,7 @@ function createSetOperator(type, isAll) {
 var SQLiteSelectBuilder, SQLiteSelectQueryBuilderBase, SQLiteSelectBase, getSQLiteSetOperators, union, unionAll, intersect, except;
 var init_select2 = __esm({
   "../node_modules/drizzle-orm/sqlite-core/query-builders/select.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_query_builder();
@@ -7498,7 +7498,7 @@ var init_select2 = __esm({
 var QueryBuilder;
 var init_query_builder2 = __esm({
   "../node_modules/drizzle-orm/sqlite-core/query-builders/query-builder.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_selection_proxy();
@@ -7583,7 +7583,7 @@ var init_query_builder2 = __esm({
 var SQLiteInsertBuilder, SQLiteInsertBase;
 var init_insert = __esm({
   "../node_modules/drizzle-orm/sqlite-core/query-builders/insert.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_query_promise();
@@ -7776,7 +7776,7 @@ var init_insert = __esm({
 // ../node_modules/drizzle-orm/sqlite-core/query-builders/select.types.js
 var init_select_types = __esm({
   "../node_modules/drizzle-orm/sqlite-core/query-builders/select.types.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
   }
 });
@@ -7785,7 +7785,7 @@ var init_select_types = __esm({
 var SQLiteUpdateBuilder, SQLiteUpdateBase;
 var init_update = __esm({
   "../node_modules/drizzle-orm/sqlite-core/query-builders/update.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_query_promise();
@@ -7973,7 +7973,7 @@ var init_update = __esm({
 // ../node_modules/drizzle-orm/sqlite-core/query-builders/index.js
 var init_query_builders = __esm({
   "../node_modules/drizzle-orm/sqlite-core/query-builders/index.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_delete();
     init_insert();
@@ -7988,7 +7988,7 @@ var init_query_builders = __esm({
 var SQLiteCountBuilder;
 var init_count = __esm({
   "../node_modules/drizzle-orm/sqlite-core/query-builders/count.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_sql();
@@ -8044,7 +8044,7 @@ var init_count = __esm({
 var RelationalQueryBuilder, SQLiteRelationalQuery, SQLiteSyncRelationalQuery;
 var init_query = __esm({
   "../node_modules/drizzle-orm/sqlite-core/query-builders/query.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_query_promise();
@@ -8207,7 +8207,7 @@ var init_query = __esm({
 var SQLiteRaw;
 var init_raw = __esm({
   "../node_modules/drizzle-orm/sqlite-core/query-builders/raw.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_query_promise();
@@ -8247,7 +8247,7 @@ var init_raw = __esm({
 var BaseSQLiteDatabase;
 var init_db = __esm({
   "../node_modules/drizzle-orm/sqlite-core/db.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_selection_proxy();
@@ -8570,7 +8570,7 @@ async function hashQuery(sql2, params) {
 var Cache, NoopCache;
 var init_cache = __esm({
   "../node_modules/drizzle-orm/cache/core/cache.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     Cache = class {
@@ -8602,7 +8602,7 @@ var init_cache = __esm({
 // ../node_modules/drizzle-orm/cache/core/index.js
 var init_core = __esm({
   "../node_modules/drizzle-orm/cache/core/index.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_cache();
   }
@@ -8611,7 +8611,7 @@ var init_core = __esm({
 // ../node_modules/drizzle-orm/sqlite-core/alias.js
 var init_alias2 = __esm({
   "../node_modules/drizzle-orm/sqlite-core/alias.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
   }
 });
@@ -8620,7 +8620,7 @@ var init_alias2 = __esm({
 var ExecuteResultSync, SQLitePreparedQuery, SQLiteSession, SQLiteTransaction;
 var init_session = __esm({
   "../node_modules/drizzle-orm/sqlite-core/session.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_cache();
     init_entity();
@@ -8839,7 +8839,7 @@ var init_session = __esm({
 // ../node_modules/drizzle-orm/sqlite-core/subquery.js
 var init_subquery2 = __esm({
   "../node_modules/drizzle-orm/sqlite-core/subquery.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
   }
 });
@@ -8848,7 +8848,7 @@ var init_subquery2 = __esm({
 var ViewBuilderCore, ViewBuilder, ManualViewBuilder, SQLiteView;
 var init_view = __esm({
   "../node_modules/drizzle-orm/sqlite-core/view.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_selection_proxy();
@@ -8958,7 +8958,7 @@ var init_view = __esm({
 // ../node_modules/drizzle-orm/sqlite-core/index.js
 var init_sqlite_core = __esm({
   "../node_modules/drizzle-orm/sqlite-core/index.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_alias2();
     init_checks();
@@ -8990,7 +8990,7 @@ function d1ToRawMapping(results) {
 var SQLiteD1Session, D1Transaction, D1PreparedQuery;
 var init_session2 = __esm({
   "../node_modules/drizzle-orm/d1/session.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_core();
     init_entity();
@@ -9218,7 +9218,7 @@ function drizzle(client, config = {}) {
 var DrizzleD1Database;
 var init_driver = __esm({
   "../node_modules/drizzle-orm/d1/driver.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_entity();
     init_logger();
@@ -9242,7 +9242,7 @@ var init_driver = __esm({
 // ../node_modules/drizzle-orm/d1/index.js
 var init_d1 = __esm({
   "../node_modules/drizzle-orm/d1/index.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_driver();
     init_session2();
@@ -9254,16 +9254,19 @@ var schema_exports = {};
 __export(schema_exports, {
   changeRequests: () => changeRequests,
   conversations: () => conversations,
+  dailyGigs: () => dailyGigs,
   deliverables: () => deliverables,
   directMessages: () => directMessages,
+  gigOffers: () => gigOffers,
+  gigRecruiterAlerts: () => gigRecruiterAlerts,
   messages: () => messages,
   projects: () => projects,
   users: () => users
 });
-var users, projects, deliverables, messages, conversations, directMessages, changeRequests;
+var users, projects, deliverables, messages, conversations, directMessages, changeRequests, dailyGigs, gigOffers, gigRecruiterAlerts;
 var init_schema = __esm({
   "../src/db/schema.ts"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_sqlite_core();
     users = sqliteTable("users", {
@@ -9277,6 +9280,8 @@ var init_schema = __esm({
       scopeCreepIndex: integer("scopeCreepIndex").default(0),
       disputeRatio: integer("disputeRatio").default(0),
       trustVelocity: integer("trustVelocity").default(0),
+      dailyGigMode: integer("dailyGigMode", { mode: "boolean" }).default(false),
+      skillsJson: text("skillsJson", { mode: "json" }).$type().default([]),
       createdAt: integer("createdAt", { mode: "timestamp" }).$defaultFn(() => /* @__PURE__ */ new Date()),
       updatedAt: integer("updatedAt", { mode: "timestamp" }).$defaultFn(() => /* @__PURE__ */ new Date())
     });
@@ -9341,13 +9346,43 @@ var init_schema = __esm({
       approved: integer("approved", { mode: "boolean" }).default(false),
       createdAt: integer("createdAt", { mode: "timestamp" }).$defaultFn(() => /* @__PURE__ */ new Date())
     });
+    dailyGigs = sqliteTable("daily_gigs", {
+      id: integer("id").primaryKey({ autoIncrement: true }),
+      clientId: integer("clientId").references(() => users.id).notNull(),
+      title: text("title").notNull(),
+      budget: text("budget").notNull(),
+      duration: text("duration").notNull(),
+      requiredSkills: text("requiredSkills", { mode: "json" }).$type().default([]),
+      description: text("description"),
+      status: text("status", { enum: ["open", "filled", "cancelled"] }).default("open").notNull(),
+      acceptedFreelancerId: integer("acceptedFreelancerId").references(() => users.id),
+      createdAt: integer("createdAt", { mode: "timestamp" }).$defaultFn(() => /* @__PURE__ */ new Date()),
+      updatedAt: integer("updatedAt", { mode: "timestamp" }).$defaultFn(() => /* @__PURE__ */ new Date())
+    });
+    gigOffers = sqliteTable("gig_offers", {
+      id: integer("id").primaryKey({ autoIncrement: true }),
+      gigId: integer("gigId").references(() => dailyGigs.id).notNull(),
+      freelancerId: integer("freelancerId").references(() => users.id).notNull(),
+      status: text("status", { enum: ["pending", "accepted", "rejected"] }).default("pending").notNull(),
+      createdAt: integer("createdAt", { mode: "timestamp" }).$defaultFn(() => /* @__PURE__ */ new Date())
+    }, (table) => ({
+      gigOfferUnique: uniqueIndex("gig_offer_unique").on(table.gigId, table.freelancerId)
+    }));
+    gigRecruiterAlerts = sqliteTable("gig_recruiter_alerts", {
+      id: integer("id").primaryKey({ autoIncrement: true }),
+      clientId: integer("clientId").references(() => users.id).notNull(),
+      gigId: integer("gigId").references(() => dailyGigs.id).notNull(),
+      freelancerId: integer("freelancerId").references(() => users.id).notNull(),
+      read: integer("read", { mode: "boolean" }).default(false).notNull(),
+      createdAt: integer("createdAt", { mode: "timestamp" }).$defaultFn(() => /* @__PURE__ */ new Date())
+    });
   }
 });
 
 // ../node_modules/hono/dist/utils/cookie.js
 var init_cookie = __esm({
   "../node_modules/hono/dist/utils/cookie.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_url();
   }
@@ -9356,7 +9391,7 @@ var init_cookie = __esm({
 // ../node_modules/hono/dist/helper/cookie/index.js
 var init_cookie2 = __esm({
   "../node_modules/hono/dist/helper/cookie/index.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_cookie();
   }
@@ -9366,7 +9401,7 @@ var init_cookie2 = __esm({
 var decodeBase64Url, encodeBase64Url, encodeBase64, decodeBase64;
 var init_encode = __esm({
   "../node_modules/hono/dist/utils/encode.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     decodeBase64Url = /* @__PURE__ */ __name((str) => {
       return decodeBase64(str.replace(/_|-/g, (m) => ({ _: "/", "-": "+" })[m] ?? m));
@@ -9397,7 +9432,7 @@ var init_encode = __esm({
 var AlgorithmTypes;
 var init_jwa = __esm({
   "../node_modules/hono/dist/utils/jwt/jwa.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     AlgorithmTypes = /* @__PURE__ */ ((AlgorithmTypes2) => {
       AlgorithmTypes2["HS256"] = "HS256";
@@ -9422,7 +9457,7 @@ var init_jwa = __esm({
 var knownUserAgents, getRuntimeKey, checkUserAgentEquals;
 var init_adapter = __esm({
   "../node_modules/hono/dist/helper/adapter/index.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     knownUserAgents = {
       deno: "Deno",
@@ -9462,7 +9497,7 @@ var init_adapter = __esm({
 var JwtAlgorithmNotImplemented, JwtAlgorithmRequired, JwtAlgorithmMismatch, JwtTokenInvalid, JwtTokenNotBefore, JwtTokenExpired, JwtTokenIssuedAt, JwtTokenIssuer, JwtHeaderInvalid, JwtHeaderRequiresKid, JwtSymmetricAlgorithmNotAllowed, JwtAlgorithmNotAllowed, JwtTokenSignatureMismatched, JwtPayloadRequiresAud, JwtTokenAudience, CryptoKeyUsage;
 var init_types = __esm({
   "../node_modules/hono/dist/utils/jwt/types.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     JwtAlgorithmNotImplemented = class extends Error {
       static {
@@ -9621,7 +9656,7 @@ var init_types = __esm({
 var utf8Encoder, utf8Decoder;
 var init_utf8 = __esm({
   "../node_modules/hono/dist/utils/jwt/utf8.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     utf8Encoder = new TextEncoder();
     utf8Decoder = new TextDecoder();
@@ -9814,7 +9849,7 @@ function isCryptoKey(key) {
 }
 var init_jws = __esm({
   "../node_modules/hono/dist/utils/jwt/jws.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_adapter();
     init_encode();
@@ -9842,7 +9877,7 @@ function isTokenHeader(obj) {
 var encodeJwtPart, encodeSignaturePart, decodeJwtPart, sign, verify, symmetricAlgorithms, verifyWithJwks, decode, decodeHeader;
 var init_jwt = __esm({
   "../node_modules/hono/dist/utils/jwt/jwt.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_encode();
     init_jwa();
@@ -10022,7 +10057,7 @@ var init_jwt = __esm({
 var Jwt;
 var init_jwt2 = __esm({
   "../node_modules/hono/dist/utils/jwt/index.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_jwt();
     Jwt = { sign, verify, decode, verifyWithJwks };
@@ -10033,7 +10068,7 @@ var init_jwt2 = __esm({
 var verifyWithJwks2, verify2, decode2, sign2;
 var init_jwt3 = __esm({
   "../node_modules/hono/dist/middleware/jwt/jwt.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_cookie2();
     init_http_exception();
@@ -10049,7 +10084,7 @@ var init_jwt3 = __esm({
 // ../node_modules/hono/dist/middleware/jwt/index.js
 var init_jwt4 = __esm({
   "../node_modules/hono/dist/middleware/jwt/index.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_jwt3();
     init_jwa();
@@ -10059,7 +10094,7 @@ var init_jwt4 = __esm({
 // ../node_modules/drizzle-orm/operations.js
 var init_operations = __esm({
   "../node_modules/drizzle-orm/operations.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
   }
 });
@@ -10067,7 +10102,7 @@ var init_operations = __esm({
 // ../node_modules/drizzle-orm/index.js
 var init_drizzle_orm = __esm({
   "../node_modules/drizzle-orm/index.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_alias();
     init_column_builder();
@@ -10089,7 +10124,7 @@ var init_drizzle_orm = __esm({
 // (disabled):crypto
 var require_crypto = __commonJS({
   "(disabled):crypto"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
   }
 });
@@ -10618,7 +10653,7 @@ function decodeBase642(string, length) {
 var import_crypto, randomFallback, nextTick, BASE64_CODE, BASE64_INDEX, BCRYPT_SALT_LEN, GENSALT_DEFAULT_LOG2_ROUNDS, BLOWFISH_NUM_ROUNDS, MAX_EXECUTION_TIME, P_ORIG, S_ORIG, C_ORIG, bcryptjs_default;
 var init_bcryptjs = __esm({
   "../node_modules/bcryptjs/index.js"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     import_crypto = __toESM(require_crypto(), 1);
     randomFallback = null;
@@ -11853,11 +11888,158 @@ var init_bcryptjs = __esm({
   }
 });
 
+// lib/gemini.ts
+async function generateGeminiText({
+  apiKey,
+  systemPrompt,
+  messages: messages2,
+  jsonMode = false,
+  temperature
+}) {
+  const contents = messages2.map((m) => ({
+    role: m.role === "assistant" ? "model" : "user",
+    parts: [{ text: m.content }]
+  }));
+  const generationConfig = {
+    maxOutputTokens: 8192,
+    temperature: temperature ?? (jsonMode ? 0.35 : 0.75)
+  };
+  if (jsonMode) {
+    generationConfig.responseMimeType = "application/json";
+  }
+  const body = {
+    systemInstruction: { parts: [{ text: systemPrompt }] },
+    contents,
+    generationConfig
+  };
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${encodeURIComponent(apiKey)}`;
+  const res = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Gemini HTTP ${res.status}: ${errText.slice(0, 800)}`);
+  }
+  const data = await res.json();
+  if (data.error?.message) {
+    throw new Error(data.error.message);
+  }
+  const text2 = data.candidates?.[0]?.content?.parts?.map((p) => p.text ?? "").join("") ?? "";
+  return text2.trim();
+}
+var GEMINI_MODEL, MAYA_SYSTEM;
+var init_gemini = __esm({
+  "lib/gemini.ts"() {
+    init_functionsRoutes_0_6780145861996045();
+    init_checked_fetch();
+    GEMINI_MODEL = "gemini-2.0-flash";
+    __name(generateGeminiText, "generateGeminiText");
+    MAYA_SYSTEM = {
+      chat: `You are MAYA, an AI hiring assistant on the Accredify freelancer\u2013client platform.
+Help users describe projects in natural language, clarify requirements, and suggest next steps.
+Be concise, professional, and actionable. If the user should use a platform feature (e.g. browse Freelancers, create a project), say so.
+Do not claim you have executed actions in the app unless the user did them; you only advise.`,
+      scope: `You are MAYA. Convert the user's project idea into a structured scope.
+Respond with ONLY valid JSON matching this shape (no markdown):
+{"title":"string","summary":"string","objectives":["string"],"skills":["string"],"deliverables":["string"],"constraints":["string"],"budgetHint":"string","timelineHint":"string","risks":["string"],"openQuestions":["string"]}`,
+      job_post: `You are MAYA. Turn the user's rough idea into a professional freelance job post.
+Respond with ONLY valid JSON:
+{"title":"string","overview":"string","responsibilities":["string"],"requiredSkills":["string"],"niceToHave":["string"],"deliverables":["string"],"timeline":"string","budgetGuidance":"string","howToApply":"string"}`,
+      milestones: `You are MAYA. Break the described work into milestones.
+Respond with ONLY valid JSON:
+{"milestones":[{"name":"string","description":"string","deliverables":["string"],"suggestedDuration":"string"}],"notes":"string"}`,
+      interview: `You are MAYA. Generate interview questions tailored to the project.
+Respond with ONLY valid JSON:
+{"questions":[{"question":"string","whatToListenFor":"string"}],"tips":"string"}`,
+      proposal: `You are MAYA. Help a freelancer draft a proposal. Use the client's/project context the user provides.
+Respond with ONLY valid JSON:
+{"opening":"string","approach":["string"],"timeline":"string","pricingNotes":"string","closing":"string","assumptions":["string"]}`,
+      summarize: `You are MAYA. Summarize the conversation excerpt into actionable tasks and decisions.
+Respond with ONLY valid JSON:
+{"summary":"string","actionItems":[{"task":"string","owner":"client|freelancer|either"}],"decisions":["string"],"followUps":["string"]}`,
+      contract: `You are MAYA. Produce a concise freelance contract OUTLINE from the described agreement (not legal advice).
+Respond with ONLY valid JSON:
+{"parties":"string","scope":"string","deliverables":["string"],"paymentTerms":"string","timeline":"string","revisions":"string","intellectualProperty":"string","termination":"string","disputes":"string","otherClauses":["string"],"disclaimer":"string"}`,
+      fraud: `You are MAYA. Review the pasted job post, profile snippet, or message for scam/red-flag patterns.
+You are advisory only. Respond with ONLY valid JSON:
+{"riskLevel":"low|medium|high","flags":[{"code":"string","detail":"string"}],"recommendations":["string"]}`,
+      career: `You are MAYA acting as a career coach for freelancers. Based on what the user shares, suggest skills to learn, positioning, pricing mindset, and portfolio improvements.
+Respond with ONLY valid JSON:
+{"strengths":["string"],"skillGaps":["string"],"pricingTips":["string"],"portfolioTips":["string"],"nextSteps":["string"]}`,
+      team: `You are MAYA. The user describes a larger initiative. Suggest a lean team composition (roles, not real people).
+Respond with ONLY valid JSON:
+{"roles":[{"title":"string","why":"string","keySkills":["string"]}],"sequencing":"string","risks":["string"]}`,
+      budget: `You are MAYA. Give a pragmatic budget and duration range estimate for freelance work described. Use broad ranges unless given specifics.
+Respond with ONLY valid JSON:
+{"estimateLow":"number","estimateHigh":"number","currencyHint":"string","basis":"string","timelineLow":"string","timelineHigh":"string","caveats":["string"]}`,
+      nda: `You are MAYA. Draft a simple mutual NDA outline for early discussions (not legal advice).
+Respond with ONLY valid JSON:
+{"parties":"string","confidentialInformation":"string","obligations":["string]","term":"string","exceptions":["string"],"disclaimer":"string"}`,
+      match: `You match clients to freelancers using the user's project brief and a provided roster (ids and metrics only).
+Respond with ONLY valid JSON:
+{"matches":[{"freelancerId":0,"score":0,"summary":"string","fitReasons":["string"]}],"notes":"string"}
+Rules: freelancerId MUST be from the roster. Prefer 3\u20135 matches. Score is 0-100.`
+    };
+  }
+});
+
 // api/[[route]].ts
-var app, authMiddleware, onRequest;
+function parseSkillsInput(raw2) {
+  if (Array.isArray(raw2))
+    return raw2.map((x) => String(x).trim()).filter(Boolean).slice(0, 48);
+  if (typeof raw2 === "string")
+    return raw2.split(/[,;\n]+/).map((s) => s.trim()).filter(Boolean).slice(0, 48);
+  return [];
+}
+function normalizeSkillToken(s) {
+  return s.trim().toLowerCase();
+}
+function coerceSkillsArray(raw2) {
+  if (raw2 == null) return [];
+  if (Array.isArray(raw2)) return raw2.map((x) => String(x).trim()).filter(Boolean);
+  if (typeof raw2 === "string") {
+    const s = raw2.trim();
+    if (!s || s === "[]") return [];
+    try {
+      const parsed = JSON.parse(s);
+      if (Array.isArray(parsed)) return parsed.map((x) => String(x).trim()).filter(Boolean);
+    } catch {
+    }
+    return parseSkillsInput(s);
+  }
+  return [];
+}
+function freelancerMatchesGigSkills(freelancerSkillsRaw, gigSkillsRaw) {
+  const freelancerSkills = coerceSkillsArray(freelancerSkillsRaw);
+  const gigSkills = coerceSkillsArray(gigSkillsRaw);
+  const gn = gigSkills.map(normalizeSkillToken).filter(Boolean);
+  const fnSet = new Set(freelancerSkills.map(normalizeSkillToken));
+  if (gn.length === 0) return false;
+  for (const g of gn) {
+    if (fnSet.has(g)) return true;
+    for (const f of fnSet) {
+      if (f.includes(g) || g.includes(f)) return true;
+    }
+  }
+  return false;
+}
+async function getOrCreateDirectConversation(db, uid, otherId) {
+  const existing = await db.query.conversations.findFirst({
+    where: or(
+      and(eq(conversations.participant1Id, uid), eq(conversations.participant2Id, otherId)),
+      and(eq(conversations.participant1Id, otherId), eq(conversations.participant2Id, uid))
+    )
+  });
+  if (existing) return existing.id;
+  const [row] = await db.insert(conversations).values({ participant1Id: uid, participant2Id: otherId }).returning();
+  return row.id;
+}
+var app, authMiddleware, MAYA_GEMINI_KEY_MESSAGE, MAYA_STRUCTURED_MODES, onRequest;
 var init_route = __esm({
   "api/[[route]].ts"() {
-    init_functionsRoutes_0_5536817893070506();
+    init_functionsRoutes_0_6780145861996045();
     init_checked_fetch();
     init_dist();
     init_cloudflare_pages();
@@ -11866,7 +12048,13 @@ var init_route = __esm({
     init_jwt4();
     init_drizzle_orm();
     init_bcryptjs();
+    init_gemini();
     app = new Hono2().basePath("/api");
+    __name(parseSkillsInput, "parseSkillsInput");
+    __name(normalizeSkillToken, "normalizeSkillToken");
+    __name(coerceSkillsArray, "coerceSkillsArray");
+    __name(freelancerMatchesGigSkills, "freelancerMatchesGigSkills");
+    __name(getOrCreateDirectConversation, "getOrCreateDirectConversation");
     app.get("/health", (c) => {
       return c.json({
         success: true,
@@ -11915,7 +12103,10 @@ var init_route = __esm({
             name: newUser.name,
             email: newUser.email,
             role: newUser.role,
-            trustScore: newUser.trustScore
+            trustScore: newUser.trustScore,
+            dailyGigMode: !!newUser.dailyGigMode,
+            skills: newUser.skillsJson || [],
+            availabilityStatus: newUser.dailyGigMode ? "Available Now" : "Offline"
           },
           token
         }
@@ -11953,7 +12144,10 @@ var init_route = __esm({
             name: user.name,
             email: user.email,
             role: user.role,
-            trustScore: user.trustScore
+            trustScore: user.trustScore,
+            dailyGigMode: !!user.dailyGigMode,
+            skills: user.skillsJson || [],
+            availabilityStatus: user.dailyGigMode ? "Available Now" : "Offline"
           },
           token
         }
@@ -11991,6 +12185,7 @@ var init_route = __esm({
         columns: { password: false }
       });
       if (!user) return c.json({ success: false, message: "User not found" }, 404);
+      const skillsSafe = (user.skillsJson ?? []) || [];
       return c.json({
         success: true,
         data: {
@@ -12002,7 +12197,10 @@ var init_route = __esm({
           scopeDiscipline: user.scopeDiscipline,
           scopeCreepIndex: user.scopeCreepIndex,
           disputeRatio: user.disputeRatio,
-          trustVelocity: user.trustVelocity
+          trustVelocity: user.trustVelocity,
+          dailyGigMode: !!user.dailyGigMode,
+          skills: skillsSafe,
+          availabilityStatus: user.dailyGigMode ? "Available Now" : "Offline"
         }
       });
     });
@@ -12040,9 +12238,243 @@ var init_route = __esm({
         scopeCreepIndex: users.scopeCreepIndex,
         disputeRatio: users.disputeRatio,
         trustVelocity: users.trustVelocity,
+        dailyGigMode: users.dailyGigMode,
+        skillsJson: users.skillsJson,
         createdAt: users.createdAt
       }).from(users).where(eq(users.role, "freelancer"));
-      return c.json({ success: true, count: freelancers.length, data: freelancers });
+      const enriched = freelancers.map((f) => {
+        const skills = f.skillsJson ?? [];
+        const { skillsJson: _omit, ...rest } = f;
+        return {
+          ...rest,
+          skills,
+          availabilityStatus: f.dailyGigMode === true ? "Available Now" : "Offline"
+        };
+      });
+      return c.json({ success: true, count: enriched.length, data: enriched });
+    });
+    app.patch("/users/me", authMiddleware, async (c) => {
+      const db = drizzle(c.env.DB, { schema: schema_exports });
+      const userId = c.get("userId");
+      const me = await db.query.users.findFirst({ where: eq(users.id, userId) });
+      if (!me) return c.json({ success: false, message: "User not found" }, 404);
+      if (me.role !== "freelancer")
+        return c.json({ success: false, message: "Only freelancers can update this profile section" }, 403);
+      const body = await c.req.json().catch(() => ({}));
+      let hasPatch = false;
+      const patch = { updatedAt: /* @__PURE__ */ new Date() };
+      if (typeof body.dailyGigMode === "boolean") {
+        patch["dailyGigMode"] = body.dailyGigMode;
+        hasPatch = true;
+      }
+      if (body.skills !== void 0) {
+        patch["skillsJson"] = parseSkillsInput(body.skills);
+        hasPatch = true;
+      }
+      if (!hasPatch) return c.json({ success: false, message: "Provide dailyGigMode and/or skills" }, 400);
+      await db.update(users).set(patch).where(eq(users.id, userId));
+      const user = await db.query.users.findFirst({
+        where: eq(users.id, userId),
+        columns: { password: false }
+      });
+      const skillsSafe = (user?.skillsJson ?? []) || [];
+      return c.json({
+        success: true,
+        data: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          trustScore: user.trustScore,
+          scopeDiscipline: user.scopeDiscipline,
+          scopeCreepIndex: user.scopeCreepIndex,
+          disputeRatio: user.disputeRatio,
+          trustVelocity: user.trustVelocity,
+          dailyGigMode: !!user.dailyGigMode,
+          skills: skillsSafe,
+          availabilityStatus: user.dailyGigMode ? "Available Now" : "Offline"
+        }
+      });
+    });
+    app.post("/gigs", authMiddleware, async (c) => {
+      const db = drizzle(c.env.DB, { schema: schema_exports });
+      const recruiterId = c.get("userId");
+      const recruiter = await db.query.users.findFirst({
+        where: eq(users.id, recruiterId)
+      });
+      if (!recruiter || recruiter.role !== "client")
+        return c.json({ success: false, message: "Only clients (recruiters) can post instant gigs" }, 403);
+      const body = await c.req.json().catch(() => ({}));
+      const title = String(body.title ?? "").trim();
+      const budget = String(body.budget ?? "").trim();
+      const duration = String(body.duration ?? "").trim();
+      const requiredSkills = parseSkillsInput(body.requiredSkills ?? body.required_skills ?? []);
+      const description = body.description ? String(body.description).trim() : "";
+      if (!title || !budget || !duration) {
+        return c.json({ success: false, message: "title, budget, and duration are required" }, 400);
+      }
+      if (requiredSkills.length === 0) {
+        return c.json(
+          { success: false, message: "Add at least one required skill so Daily Gig freelancers can match" },
+          400
+        );
+      }
+      const [gigRow] = await db.insert(dailyGigs).values({
+        clientId: recruiterId,
+        title,
+        budget,
+        duration,
+        requiredSkills,
+        description: description || void 0,
+        status: "open"
+      }).returning();
+      const candidates = await db.select().from(users).where(and(eq(users.role, "freelancer"), eq(users.dailyGigMode, true)));
+      let dispatched = 0;
+      const nowSkillsNormalized = coerceSkillsArray(gigRow.requiredSkills);
+      for (const f of candidates) {
+        if (!freelancerMatchesGigSkills(f.skillsJson, nowSkillsNormalized)) continue;
+        try {
+          await db.insert(gigOffers).values({
+            gigId: gigRow.id,
+            freelancerId: f.id,
+            status: "pending"
+          });
+          dispatched++;
+        } catch {
+        }
+      }
+      return c.json({
+        success: true,
+        data: {
+          ...gigRow,
+          recruiterNotifiedFreelancers: dispatched,
+          freelancersListeningNow: candidates.length,
+          requiredSkills
+        }
+      }, 201);
+    });
+    app.get("/gigs/freelancer/offers", authMiddleware, async (c) => {
+      const db = drizzle(c.env.DB, { schema: schema_exports });
+      const userId = c.get("userId");
+      const me = await db.query.users.findFirst({ where: eq(users.id, userId) });
+      if (!me || me.role !== "freelancer")
+        return c.json({ success: false, message: "Freelancers only" }, 403);
+      const rows = await db.select({
+        offerId: gigOffers.id,
+        status: gigOffers.status,
+        createdAt: gigOffers.createdAt,
+        gigId: dailyGigs.id,
+        title: dailyGigs.title,
+        budget: dailyGigs.budget,
+        duration: dailyGigs.duration,
+        requiredSkills: dailyGigs.requiredSkills,
+        description: dailyGigs.description,
+        gigStatus: dailyGigs.status,
+        clientId: users.id,
+        clientName: users.name,
+        clientEmail: users.email,
+        clientTrust: users.trustScore
+      }).from(gigOffers).innerJoin(dailyGigs, eq(gigOffers.gigId, dailyGigs.id)).innerJoin(users, eq(dailyGigs.clientId, users.id)).where(
+        and(eq(gigOffers.freelancerId, userId), eq(gigOffers.status, "pending"), eq(dailyGigs.status, "open"))
+      ).orderBy(desc(gigOffers.createdAt));
+      return c.json({ success: true, data: rows });
+    });
+    app.post("/gigs/offers/:offerId/respond", authMiddleware, async (c) => {
+      const db = drizzle(c.env.DB, { schema: schema_exports });
+      const userId = c.get("userId");
+      const offerId = parseInt(c.req.param("offerId"), 10);
+      const body = await c.req.json().catch(() => ({}));
+      const action = String(body.action ?? "").toLowerCase();
+      if (!["accept", "reject"].includes(action)) {
+        return c.json({ success: false, message: "action must be accept or reject" }, 400);
+      }
+      const offer = await db.query.gigOffers.findFirst({
+        where: eq(gigOffers.id, offerId)
+      });
+      if (!offer || offer.freelancerId !== userId)
+        return c.json({ success: false, message: "Offer not found" }, 404);
+      const gig = await db.query.dailyGigs.findFirst({
+        where: eq(dailyGigs.id, offer.gigId)
+      });
+      if (!gig || gig.status !== "open")
+        return c.json({ success: false, message: "This gig is no longer accepting responses" }, 400);
+      if (offer.status !== "pending")
+        return c.json({ success: false, message: "You already responded to this gig" }, 400);
+      if (action === "reject") {
+        await db.update(gigOffers).set({ status: "rejected" }).where(eq(gigOffers.id, offerId));
+        return c.json({ success: true, data: { responded: "rejected", offerId } });
+      }
+      const [filledGig] = await db.update(dailyGigs).set({
+        status: "filled",
+        acceptedFreelancerId: userId,
+        updatedAt: /* @__PURE__ */ new Date()
+      }).where(and(eq(dailyGigs.id, gig.id), eq(dailyGigs.status, "open"))).returning();
+      if (!filledGig) {
+        return c.json({ success: false, message: "This gig was just filled by another freelancer" }, 409);
+      }
+      await db.update(gigOffers).set({ status: "accepted" }).where(eq(gigOffers.id, offerId));
+      await db.update(gigOffers).set({ status: "rejected" }).where(
+        and(eq(gigOffers.gigId, gig.id), ne(gigOffers.id, offerId), eq(gigOffers.status, "pending"))
+      );
+      const convId = await getOrCreateDirectConversation(db, userId, gig.clientId);
+      await db.insert(directMessages).values({
+        conversationId: convId,
+        senderId: userId,
+        content: `[Daily Gig] I accepted \u201C${gig.title}\u201D. Ready to kick off.`
+      });
+      await db.insert(gigRecruiterAlerts).values({
+        clientId: gig.clientId,
+        gigId: gig.id,
+        freelancerId: userId,
+        read: false
+      });
+      await db.update(conversations).set({ lastMessageAt: /* @__PURE__ */ new Date() }).where(eq(conversations.id, convId));
+      return c.json({
+        success: true,
+        data: {
+          responded: "accepted",
+          offerId,
+          gigId: gig.id,
+          conversationId: convId,
+          clientId: gig.clientId
+        }
+      });
+    });
+    app.get("/gigs/recruiter/alerts", authMiddleware, async (c) => {
+      const db = drizzle(c.env.DB, { schema: schema_exports });
+      const userId = c.get("userId");
+      const me = await db.query.users.findFirst({ where: eq(users.id, userId) });
+      if (!me || me.role !== "client")
+        return c.json({ success: false, message: "Clients only" }, 403);
+      const url = new URL(c.req.url);
+      const unreadOnly = url.searchParams.get("unread") === "1";
+      const q = db.select({
+        id: gigRecruiterAlerts.id,
+        read: gigRecruiterAlerts.read,
+        createdAt: gigRecruiterAlerts.createdAt,
+        gigId: dailyGigs.id,
+        gigTitle: dailyGigs.title,
+        budget: dailyGigs.budget,
+        duration: dailyGigs.duration,
+        freelancerId: users.id,
+        freelancerName: users.name,
+        freelancerEmail: users.email
+      }).from(gigRecruiterAlerts).innerJoin(dailyGigs, eq(gigRecruiterAlerts.gigId, dailyGigs.id)).innerJoin(users, eq(gigRecruiterAlerts.freelancerId, users.id)).where(
+        unreadOnly ? and(eq(gigRecruiterAlerts.clientId, userId), eq(gigRecruiterAlerts.read, false)) : eq(gigRecruiterAlerts.clientId, userId)
+      ).orderBy(desc(gigRecruiterAlerts.createdAt));
+      const rows = await q;
+      return c.json({ success: true, data: rows });
+    });
+    app.patch("/gigs/recruiter/alerts/:id/read", authMiddleware, async (c) => {
+      const db = drizzle(c.env.DB, { schema: schema_exports });
+      const userId = c.get("userId");
+      const alertId = parseInt(c.req.param("id"), 10);
+      const row = await db.query.gigRecruiterAlerts.findFirst({
+        where: eq(gigRecruiterAlerts.id, alertId)
+      });
+      if (!row || row.clientId !== userId) return c.json({ success: false, message: "Alert not found" }, 404);
+      await db.update(gigRecruiterAlerts).set({ read: true }).where(eq(gigRecruiterAlerts.id, alertId));
+      return c.json({ success: true, data: { id: alertId, read: true } });
     });
     app.get("/users/:id", async (c) => {
       const db = drizzle(c.env.DB, { schema: schema_exports });
@@ -12355,14 +12787,173 @@ var init_route = __esm({
       }).where(eq(conversations.id, conversationId));
       return c.json({ success: true, data: { _id: newMsg.id, ...newMsg } }, 201);
     });
+    MAYA_GEMINI_KEY_MESSAGE = "MAYA needs a non-empty GEMINI_API_KEY in client/.dev.vars (same folder as wrangler.toml). Root .env and .env.example are not loaded by Cloudflare Workers. Get a key at https://aistudio.google.com/apikey \u2014 then restart npm run dev:api (or use npm run dev:all).";
+    MAYA_STRUCTURED_MODES = /* @__PURE__ */ new Set([
+      "scope",
+      "job_post",
+      "milestones",
+      "interview",
+      "proposal",
+      "summarize",
+      "contract",
+      "fraud",
+      "career",
+      "team",
+      "budget",
+      "nda"
+    ]);
+    app.post("/maya/chat", authMiddleware, async (c) => {
+      const key = c.env.GEMINI_API_KEY?.trim();
+      if (!key) {
+        return c.json({ success: false, message: MAYA_GEMINI_KEY_MESSAGE }, 503);
+      }
+      const body = await c.req.json().catch(() => ({}));
+      if (body.mode === "match") {
+        return c.json(
+          {
+            success: false,
+            message: 'Freelancer matching uses POST /api/maya/match with { "brief": "..." }.'
+          },
+          400
+        );
+      }
+      const mode = typeof body.mode === "string" && body.mode in MAYA_SYSTEM ? body.mode : "chat";
+      const rawMessages = Array.isArray(body.messages) ? body.messages : [];
+      const messages2 = rawMessages.filter((m) => {
+        if (!m || typeof m !== "object") return false;
+        const r = m;
+        return (r.role === "user" || r.role === "assistant") && typeof r.content === "string";
+      }).map((m) => ({
+        role: m.role,
+        content: m.content.slice(0, 24e3)
+      })).slice(-30);
+      if (messages2.length === 0) {
+        return c.json({ success: false, message: "Provide at least one chat message" }, 400);
+      }
+      const systemPrompt = MAYA_SYSTEM[mode];
+      const jsonMode = MAYA_STRUCTURED_MODES.has(mode);
+      try {
+        const text2 = await generateGeminiText({
+          apiKey: key,
+          systemPrompt,
+          messages: messages2,
+          jsonMode
+        });
+        let structured = null;
+        if (jsonMode) {
+          try {
+            structured = JSON.parse(text2);
+          } catch {
+            structured = null;
+          }
+        }
+        return c.json({
+          success: true,
+          data: {
+            mode,
+            reply: text2,
+            structured
+          }
+        });
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : "Gemini request failed";
+        return c.json({ success: false, message: msg }, 502);
+      }
+    });
+    app.post("/maya/match", authMiddleware, async (c) => {
+      const key = c.env.GEMINI_API_KEY?.trim();
+      if (!key) {
+        return c.json({ success: false, message: MAYA_GEMINI_KEY_MESSAGE }, 503);
+      }
+      const body = await c.req.json().catch(() => ({}));
+      const brief = typeof body.brief === "string" ? body.brief.trim().slice(0, 12e3) : "";
+      if (!brief) {
+        return c.json({ success: false, message: "brief is required" }, 400);
+      }
+      const db = drizzle(c.env.DB, { schema: schema_exports });
+      const freelancers = await db.select({
+        id: users.id,
+        name: users.name,
+        trustScore: users.trustScore,
+        scopeDiscipline: users.scopeDiscipline,
+        scopeCreepIndex: users.scopeCreepIndex,
+        disputeRatio: users.disputeRatio,
+        trustVelocity: users.trustVelocity
+      }).from(users).where(eq(users.role, "freelancer"));
+      if (freelancers.length === 0) {
+        return c.json({
+          success: true,
+          data: {
+            reply: "No freelancers are registered yet. Invite freelancers to sign up first.",
+            structured: { matches: [], notes: "" }
+          }
+        });
+      }
+      const rosterJson = JSON.stringify(
+        freelancers.map((f) => ({
+          freelancerId: f.id,
+          displayName: f.name,
+          trustScore: f.trustScore,
+          scopeDiscipline: f.scopeDiscipline,
+          scopeCreepIndex: f.scopeCreepIndex,
+          disputeRatio: f.disputeRatio,
+          trustVelocity: f.trustVelocity
+        }))
+      );
+      const userContent = `PROJECT BRIEF FROM CLIENT:
+${brief}
+
+FREELANCER_ROSTER_JSON:
+${rosterJson}`;
+      try {
+        const text2 = await generateGeminiText({
+          apiKey: key,
+          systemPrompt: MAYA_SYSTEM.match,
+          messages: [{ role: "user", content: userContent }],
+          jsonMode: true
+        });
+        let structured = {};
+        try {
+          structured = JSON.parse(text2);
+        } catch {
+          structured = {};
+        }
+        const ids = new Set(freelancers.map((f) => f.id));
+        const rawMatches = Array.isArray(structured.matches) ? structured.matches : [];
+        const enriched = rawMatches.filter((m) => {
+          const row = m;
+          return typeof row?.freelancerId === "number" && ids.has(row.freelancerId);
+        }).map((m) => {
+          const row = m;
+          const f = freelancers.find((x) => x.id === row.freelancerId);
+          return {
+            freelancer: f,
+            score: row.score ?? 0,
+            summary: row.summary ?? "",
+            fitReasons: Array.isArray(row.fitReasons) ? row.fitReasons : []
+          };
+        });
+        return c.json({
+          success: true,
+          data: {
+            mode: "match",
+            reply: text2,
+            structured: { matches: enriched, notes: structured.notes ?? "" }
+          }
+        });
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : "Gemini request failed";
+        return c.json({ success: false, message: msg }, 502);
+      }
+    });
     onRequest = handle(app);
   }
 });
 
-// ../.wrangler/tmp/pages-G9Svqy/functionsRoutes-0.5536817893070506.mjs
+// ../.wrangler/tmp/pages-K9LHEL/functionsRoutes-0.6780145861996045.mjs
 var routes;
-var init_functionsRoutes_0_5536817893070506 = __esm({
-  "../.wrangler/tmp/pages-G9Svqy/functionsRoutes-0.5536817893070506.mjs"() {
+var init_functionsRoutes_0_6780145861996045 = __esm({
+  "../.wrangler/tmp/pages-K9LHEL/functionsRoutes-0.6780145861996045.mjs"() {
     init_route();
     routes = [
       {
@@ -12376,20 +12967,20 @@ var init_functionsRoutes_0_5536817893070506 = __esm({
   }
 });
 
-// ../.wrangler/tmp/bundle-RRzLnu/middleware-loader.entry.ts
-init_functionsRoutes_0_5536817893070506();
+// ../.wrangler/tmp/bundle-NKjyYF/middleware-loader.entry.ts
+init_functionsRoutes_0_6780145861996045();
 init_checked_fetch();
 
-// ../.wrangler/tmp/bundle-RRzLnu/middleware-insertion-facade.js
-init_functionsRoutes_0_5536817893070506();
+// ../.wrangler/tmp/bundle-NKjyYF/middleware-insertion-facade.js
+init_functionsRoutes_0_6780145861996045();
 init_checked_fetch();
 
 // ../../../../.npm/_npx/32026684e21afda6/node_modules/wrangler/templates/pages-template-worker.ts
-init_functionsRoutes_0_5536817893070506();
+init_functionsRoutes_0_6780145861996045();
 init_checked_fetch();
 
 // ../../../../.npm/_npx/32026684e21afda6/node_modules/path-to-regexp/dist.es2015/index.js
-init_functionsRoutes_0_5536817893070506();
+init_functionsRoutes_0_6780145861996045();
 init_checked_fetch();
 function lexer(str) {
   var tokens = [];
@@ -12837,7 +13428,7 @@ var cloneResponse = /* @__PURE__ */ __name((response) => (
 ), "cloneResponse");
 
 // ../../../../.npm/_npx/32026684e21afda6/node_modules/wrangler/templates/middleware/middleware-ensure-req-body-drained.ts
-init_functionsRoutes_0_5536817893070506();
+init_functionsRoutes_0_6780145861996045();
 init_checked_fetch();
 var drainBody = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx) => {
   try {
@@ -12857,7 +13448,7 @@ var drainBody = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
 var middleware_ensure_req_body_drained_default = drainBody;
 
 // ../../../../.npm/_npx/32026684e21afda6/node_modules/wrangler/templates/middleware/middleware-miniflare3-json-error.ts
-init_functionsRoutes_0_5536817893070506();
+init_functionsRoutes_0_6780145861996045();
 init_checked_fetch();
 function reduceError(e) {
   return {
@@ -12881,7 +13472,7 @@ var jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
 }, "jsonError");
 var middleware_miniflare3_json_error_default = jsonError;
 
-// ../.wrangler/tmp/bundle-RRzLnu/middleware-insertion-facade.js
+// ../.wrangler/tmp/bundle-NKjyYF/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
@@ -12889,7 +13480,7 @@ var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
 var middleware_insertion_facade_default = pages_template_worker_default;
 
 // ../../../../.npm/_npx/32026684e21afda6/node_modules/wrangler/templates/middleware/common.ts
-init_functionsRoutes_0_5536817893070506();
+init_functionsRoutes_0_6780145861996045();
 init_checked_fetch();
 var __facade_middleware__ = [];
 function __facade_register__(...args) {
@@ -12915,7 +13506,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// ../.wrangler/tmp/bundle-RRzLnu/middleware-loader.entry.ts
+// ../.wrangler/tmp/bundle-NKjyYF/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;
@@ -13015,4 +13606,4 @@ export {
   __INTERNAL_WRANGLER_MIDDLEWARE__,
   middleware_loader_entry_default as default
 };
-//# sourceMappingURL=functionsWorker-0.8498428576709054.mjs.map
+//# sourceMappingURL=functionsWorker-0.6402850777433347.mjs.map

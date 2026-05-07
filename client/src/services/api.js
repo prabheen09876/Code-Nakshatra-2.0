@@ -132,9 +132,52 @@ export const usersAPI = {
         const response = await api.get(`/users/${freelancerId}/projects`);
         return response.data;
     },
+    /** Freelancer: Daily Gig mode + skills */
+    patchMe: async (body) => {
+        const response = await api.patch('/users/me', body);
+        return response.data;
+    },
+};
+
+/** Client posts instant gigs; freelancers receive offers */
+export const gigsAPI = {
+    postGig: async (payload) => {
+        const response = await api.post('/gigs', payload);
+        return response.data;
+    },
+    getFreelancerOffers: async () => {
+        const response = await api.get('/gigs/freelancer/offers');
+        return response.data;
+    },
+    respondToOffer: async (offerId, action) => {
+        const response = await api.post(`/gigs/offers/${offerId}/respond`, { action });
+        return response.data;
+    },
+    getRecruiterAlerts: async (unreadOnly = false) => {
+        const response = await api.get('/gigs/recruiter/alerts', {
+            params: unreadOnly ? { unread: '1' } : {},
+        });
+        return response.data;
+    },
+    markRecruiterAlertRead: async (alertId) => {
+        const response = await api.patch(`/gigs/recruiter/alerts/${alertId}/read`);
+        return response.data;
+    },
 };
 
 // ------------- Conversations API (user-to-user chat) -------------
+// ------------- MAYA (Gemini) API -------------
+export const mayaAPI = {
+    chat: async ({ mode = 'chat', messages }) => {
+        const response = await api.post('/maya/chat', { mode, messages });
+        return response.data;
+    },
+    match: async ({ brief }) => {
+        const response = await api.post('/maya/match', { brief });
+        return response.data;
+    },
+};
+
 export const conversationAPI = {
     getConversations: async () => {
         const response = await api.get('/conversations');
