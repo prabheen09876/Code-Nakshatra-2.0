@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Create an Axios instance
-// Note: Vite proxy forwards /api to http://localhost:5000 in dev
+// Note: Vite proxy forwards /api to http://localhost:8788 in dev
 const api = axios.create({
     baseURL: '/api',
     headers: {
