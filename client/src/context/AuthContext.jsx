@@ -18,12 +18,12 @@ export const AuthProvider = ({ children }) => {
         const loadUser = async () => {
             if (token) {
                 try {
-                    // Verify token and fetch user
                     const res = await authAPI.getMe();
                     setUser(res.data);
                 } catch (err) {
-                    console.error("Token invalid or expired", err);
+                    console.error('Token invalid or expired', err);
                     logout();
+                    setError('Session expired. Please log in again.');
                 }
             }
             setLoading(false);
@@ -31,6 +31,17 @@ export const AuthProvider = ({ children }) => {
 
         loadUser();
     }, [token]);
+
+    useEffect(() => {
+        const handleUnauthorized = () => {
+            logout();
+            setError('Session expired. Please log in again.');
+            setLoading(false);
+        };
+
+        window.addEventListener('auth:unauthorized', handleUnauthorized);
+        return () => window.removeEventListener('auth:unauthorized', handleUnauthorized);
+    }, []);
 
     const login = async (email, password) => {
         setError(null);
@@ -59,7 +70,6 @@ export const AuthProvider = ({ children }) => {
             setUser(newUser);
             return true;
         } catch (err) {
-            // Handle express-validator errors array or general message
             if (err.response?.data?.errors) {
                 setError(err.response.data.errors[0].message);
             } else {

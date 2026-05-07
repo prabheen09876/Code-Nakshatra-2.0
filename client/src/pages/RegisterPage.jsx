@@ -40,7 +40,7 @@ const RegisterPage = () => {
         setIsSubmitting(false);
         if (success) {
             toast.success('Account created successfully!');
-            navigate('/');
+            navigate('/dashboard');
         }
     };
 
@@ -52,7 +52,7 @@ const RegisterPage = () => {
                 <Link to="/" className="ind-auth-brand">
                     <Shield size={18} /> ACCREDIFY
                 </Link>
-                <span className="ind-auth-sys-label">SYS_AUTH // REGISTER_v1.0</span>
+                <span className="ind-auth-sys-label">SYS_AUTH // REGISTER_v2.0</span>
             </div>
 
             <motion.div

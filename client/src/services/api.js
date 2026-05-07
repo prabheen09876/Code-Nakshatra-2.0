@@ -37,7 +37,9 @@ api.interceptors.response.use(
         if (error.response && error.response.status === 401) {
             // Clear token if it's invalid or expired
             localStorage.removeItem('token');
-            // Potential redirect to login can be handled by the App/Auth context
+            if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('auth:unauthorized'));
+            }
         }
         return Promise.reject(error);
     }
@@ -89,9 +91,6 @@ export const projectAPI = {
         const response = await api.patch(`/projects/${id}/revisions`);
         return response.data;
     },
-    // We'll need a route to fetch all projects for dashboard - adding a generic mock for now
-    // Note: Backend might need an endpoint like `GET /api/projects` to fetch user's projects.
-    // We will request backend to add it if it doesn't exist.
     getUserProjects: async () => {
         const response = await api.get('/projects');
         return response.data;

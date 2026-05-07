@@ -16,6 +16,11 @@ const DashboardPage = () => {
 
     useEffect(() => {
         const fetchProjects = async () => {
+            if (!user) {
+                setProjects([]);
+                setLoading(false);
+                return;
+            }
             try {
                 const res = await projectAPI.getUserProjects();
                 if (res.success && res.data) {
@@ -26,14 +31,16 @@ const DashboardPage = () => {
                     setProjects([]);
                 }
             } catch (err) {
-                console.error('Failed to fetch projects', err);
+                if (err.response?.status !== 401) {
+                    console.error('Failed to fetch projects', err);
+                }
                 setProjects([]);
             } finally {
                 setLoading(false);
             }
         };
         fetchProjects();
-    }, []);
+    }, [user]);
 
     const handleProjectCreated = (newProject) => {
         setProjects([newProject, ...projects]);

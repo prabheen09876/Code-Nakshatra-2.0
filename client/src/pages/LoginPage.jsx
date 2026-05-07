@@ -23,7 +23,7 @@ const LoginPage = () => {
         setIsSubmitting(false);
         if (success) {
             toast.success('Successfully logged in!');
-            navigate('/');
+            navigate('/dashboard');
         }
     };
 
@@ -37,7 +37,7 @@ const LoginPage = () => {
                 <Link to="/" className="ind-auth-brand">
                     <Shield size={18} /> ACCREDIFY
                 </Link>
-                <span className="ind-auth-sys-label">SYS_AUTH // LOGIN_v1.0</span>
+                <span className="ind-auth-sys-label">SYS_AUTH // LOGIN_v2.0</span>
             </div>
 
             <motion.div
