@@ -55,6 +55,14 @@ function CompletionSummary({ project }) {
     );
 }
 
+const readFileAsDataUrl = (file) =>
+    new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () => reject(new Error('Failed to read file'));
+        reader.readAsDataURL(file);
+    });
+
 const ProjectDetailPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
@@ -204,11 +212,19 @@ const ProjectDetailPage = () => {
         setSubmittingDeliverable(true);
         try {
             if (deliverableType === 'file') {
-                const formData = new FormData();
-                formData.append('file', deliverableFile);
-                formData.append('title', deliverableForm.title || deliverableFile.name);
-                if (deliverableForm.description) formData.append('description', deliverableForm.description);
-                await projectAPI.addDeliverable(id, formData);
+                // Backend currently persists JSON. Store file as data URL so client can still open it.
+                const fileDataUrl = await readFileAsDataUrl(deliverableFile);
+                const normalizedTitle = (deliverableForm.title || deliverableFile.name || 'Uploaded file').trim();
+                const metadataDescription = deliverableForm.description?.trim()
+                    ? `${deliverableForm.description.trim()} (file: ${deliverableFile.name})`
+                    : `file: ${deliverableFile.name}`;
+
+                await projectAPI.addDeliverable(id, {
+                    title: normalizedTitle,
+                    link: fileDataUrl,
+                    description: metadataDescription,
+                    type: 'file',
+                });
             } else {
                 await projectAPI.addDeliverable(id, {
                     title: deliverableForm.title.trim(),
@@ -420,14 +436,14 @@ const ProjectDetailPage = () => {
                                                     )}
                                                 </div>
                                                 {d.description && <p style={{ fontSize: '0.875rem', color: 'var(--flux-text-muted)', margin: '0.25rem 0' }}>{d.description}</p>}
-                                                {isClient ? (
-                                                    <span style={{ fontSize: '0.875rem', color: 'var(--flux-text-muted)', display: 'inline-flex', alignItems: 'center', gap: '0.25rem', marginTop: '0.5rem' }}>
-                                                        {d.type === 'file' ? 'File submitted' : 'Link submitted'} — not viewable by client
-                                                    </span>
-                                                ) : (
+                                                {d.link && d.link !== '#' ? (
                                                     <a href={d.link.startsWith('http') ? d.link : (d.link.startsWith('/') ? d.link : '/' + d.link)} target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.875rem', color: 'var(--primary)', display: 'inline-flex', alignItems: 'center', gap: '0.25rem', marginTop: '0.5rem' }}>
-                                                        {d.type === 'file' ? 'Open file' : 'Open link'} <ExternalLink size={14} />
+                                                        {d.type === 'file' ? 'Open file' : 'Open deliverable'} <ExternalLink size={14} />
                                                     </a>
+                                                ) : (
+                                                    <span style={{ fontSize: '0.875rem', color: 'var(--flux-text-muted)', display: 'inline-flex', alignItems: 'center', gap: '0.25rem', marginTop: '0.5rem' }}>
+                                                        Deliverable submitted, but no openable URL is attached yet
+                                                    </span>
                                                 )}
                                                 {d.status === 'revision_requested' && d.clientFeedback && (
                                                     <div style={{ marginTop: '0.75rem', padding: '0.75rem', background: 'var(--flux-main-bg)', borderRadius: 'var(--radius-md)', border: '1px solid #e2e8f0', borderLeft: '3px solid var(--warning)', display: 'flex', gap: '0.5rem' }}>

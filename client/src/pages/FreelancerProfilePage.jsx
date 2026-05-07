@@ -52,7 +52,8 @@ const FreelancerProfilePage = () => {
 
     if (!profile) return null;
 
-    const shortId = profile._id ? String(profile._id).slice(-6) : '';
+    const profileId = profile._id ?? profile.id;
+    const shortId = profileId ? String(profileId).slice(-6) : '';
 
     return (
         <div className="ind-page">

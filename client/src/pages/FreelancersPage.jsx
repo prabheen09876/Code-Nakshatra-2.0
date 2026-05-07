@@ -72,7 +72,7 @@ const FreelancersPage = () => {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                         {freelancers.map((f, i) => (
                             <motion.div
-                                key={f._id}
+                                key={f._id ?? f.id}
                                 className="ind-freelancer-row"
                                 initial={{ opacity: 0, y: 8 }}
                                 animate={{ opacity: 1, y: 0 }}
@@ -93,13 +93,13 @@ const FreelancersPage = () => {
                                     </div>
                                 </div>
                                 <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                                    <Link to={`/freelancers/${f._id}`} className="ind-btn ind-btn-outline">
+                                    <Link to={`/freelancers/${f._id ?? f.id}`} className="ind-btn ind-btn-outline">
                                         PROFILE <ArrowRight size={14} />
                                     </Link>
                                     <button
                                         type="button"
                                         className="ind-btn ind-btn-black"
-                                        onClick={() => navigate(`/messages?with=${f._id}`)}
+                                        onClick={() => navigate(`/messages?with=${f._id ?? f.id}`)}
                                     >
                                         <MessageCircle size={14} /> MESSAGE
                                     </button>
