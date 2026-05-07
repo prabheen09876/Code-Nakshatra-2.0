@@ -53,7 +53,7 @@ app.post('/auth/register', async (c) => {
     }).returning();
 
     const secret = c.env.JWT_SECRET || 'fallback_secret';
-    const token = await sign({ id: newUser.id, exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30 }, secret);
+    const token = await sign({ id: newUser.id, exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30 }, secret, 'HS256');
 
     return c.json({
         success: true,
@@ -92,7 +92,7 @@ app.post('/auth/login', async (c) => {
     }
 
     const secret = c.env.JWT_SECRET || 'fallback_secret';
-    const token = await sign({ id: user.id, exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30 }, secret);
+    const token = await sign({ id: user.id, exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30 }, secret, 'HS256');
 
     return c.json({
         success: true,
@@ -119,10 +119,11 @@ export const authMiddleware = async (c: any, next: any) => {
     const token = authHeader.split(' ')[1];
     try {
         const secret = c.env.JWT_SECRET || 'fallback_secret';
-        const decoded = await verify(token, secret);
+        const decoded = await verify(token, secret, 'HS256');
         c.set('userId', decoded.id);
         await next();
-    } catch (e) {
+    } catch (e: any) {
+        console.error('JWT Verification Error:', e.message || e);
         return c.json({ success: false, message: 'Not authorized, invalid token' }, 401);
     }
 };

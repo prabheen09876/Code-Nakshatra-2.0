@@ -47,7 +47,12 @@ export const AuthProvider = ({ children }) => {
         setError(null);
         try {
             const res = await authAPI.login({ email, password });
-            const { token: newToken, user: userData } = res.data;
+            const { token: newToken, user: userData } = res.data || {};
+
+            if (!newToken || !userData) {
+                setError('Invalid login response. Please try again.');
+                return false;
+            }
 
             localStorage.setItem('token', newToken);
             setToken(newToken);
@@ -63,7 +68,12 @@ export const AuthProvider = ({ children }) => {
         setError(null);
         try {
             const res = await authAPI.register(userData);
-            const { token: newToken, user: newUser } = res.data;
+            const { token: newToken, user: newUser } = res.data || {};
+
+            if (!newToken || !newUser) {
+                setError('Invalid registration response. Please try again.');
+                return false;
+            }
 
             localStorage.setItem('token', newToken);
             setToken(newToken);

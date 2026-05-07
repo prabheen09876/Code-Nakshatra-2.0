@@ -79,7 +79,7 @@ function checkURL2(request, init) {
 __name(checkURL2, "checkURL");
 var urls2;
 var init_checked_fetch = __esm({
-  "../.wrangler/tmp/bundle-ZHjDlG/checked-fetch.js"() {
+  "../.wrangler/tmp/bundle-xmpPuC/checked-fetch.js"() {
     urls2 = /* @__PURE__ */ new Set();
     __name2(checkURL2, "checkURL");
     globalThis.fetch = new Proxy(globalThis.fetch, {
@@ -12468,7 +12468,7 @@ var init_route = __esm({
         role
       }).returning();
       const secret = c.env.JWT_SECRET || "fallback_secret";
-      const token = await sign2({ id: newUser.id, exp: Math.floor(Date.now() / 1e3) + 60 * 60 * 24 * 30 }, secret);
+      const token = await sign2({ id: newUser.id, exp: Math.floor(Date.now() / 1e3) + 60 * 60 * 24 * 30 }, secret, "HS256");
       return c.json({
         success: true,
         data: {
@@ -12500,7 +12500,7 @@ var init_route = __esm({
         return c.json({ success: false, message: "Invalid email or password" }, 401);
       }
       const secret = c.env.JWT_SECRET || "fallback_secret";
-      const token = await sign2({ id: user.id, exp: Math.floor(Date.now() / 1e3) + 60 * 60 * 24 * 30 }, secret);
+      const token = await sign2({ id: user.id, exp: Math.floor(Date.now() / 1e3) + 60 * 60 * 24 * 30 }, secret, "HS256");
       return c.json({
         success: true,
         data: {
@@ -12523,10 +12523,11 @@ var init_route = __esm({
       const token = authHeader.split(" ")[1];
       try {
         const secret = c.env.JWT_SECRET || "fallback_secret";
-        const decoded = await verify2(token, secret);
+        const decoded = await verify2(token, secret, "HS256");
         c.set("userId", decoded.id);
         await next();
       } catch (e) {
+        console.error("JWT Verification Error:", e.message || e);
         return c.json({ success: false, message: "Not authorized, invalid token" }, 401);
       }
     }, "authMiddleware");
