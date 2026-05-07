@@ -32,7 +32,7 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 
-// ../.wrangler/tmp/bundle-pyxl0j/checked-fetch.js
+// ../.wrangler/tmp/bundle-RRzLnu/checked-fetch.js
 function checkURL(request, init) {
   const url = request instanceof URL ? request : new URL(
     (typeof request === "string" ? new Request(request, init) : request).url
@@ -50,7 +50,7 @@ function checkURL(request, init) {
 }
 var urls;
 var init_checked_fetch = __esm({
-  "../.wrangler/tmp/bundle-pyxl0j/checked-fetch.js"() {
+  "../.wrangler/tmp/bundle-RRzLnu/checked-fetch.js"() {
     urls = /* @__PURE__ */ new Set();
     __name(checkURL, "checkURL");
     globalThis.fetch = new Proxy(globalThis.fetch, {
@@ -11902,7 +11902,11 @@ var init_route = __esm({
         role
       }).returning();
       const secret = c.env.JWT_SECRET || "fallback_secret";
-      const token = await sign2({ id: newUser.id }, secret);
+      const token = await sign2(
+        { id: newUser.id, exp: Math.floor(Date.now() / 1e3) + 60 * 60 * 24 * 30 },
+        secret,
+        "HS256"
+      );
       return c.json({
         success: true,
         data: {
@@ -11936,7 +11940,11 @@ var init_route = __esm({
         return c.json({ success: false, message: "Invalid email or password" }, 401);
       }
       const secret = c.env.JWT_SECRET || "fallback_secret";
-      const token = await sign2({ id: user.id }, secret);
+      const token = await sign2(
+        { id: user.id, exp: Math.floor(Date.now() / 1e3) + 60 * 60 * 24 * 30 },
+        secret,
+        "HS256"
+      );
       return c.json({
         success: true,
         data: {
@@ -11960,7 +11968,7 @@ var init_route = __esm({
       let decoded;
       try {
         const secret = c.env.JWT_SECRET || "fallback_secret";
-        decoded = await verify2(token, secret);
+        decoded = await verify2(token, secret, "HS256");
       } catch (e) {
         try {
           decoded = decode2(token)?.payload;
@@ -12368,11 +12376,11 @@ var init_functionsRoutes_0_5536817893070506 = __esm({
   }
 });
 
-// ../.wrangler/tmp/bundle-pyxl0j/middleware-loader.entry.ts
+// ../.wrangler/tmp/bundle-RRzLnu/middleware-loader.entry.ts
 init_functionsRoutes_0_5536817893070506();
 init_checked_fetch();
 
-// ../.wrangler/tmp/bundle-pyxl0j/middleware-insertion-facade.js
+// ../.wrangler/tmp/bundle-RRzLnu/middleware-insertion-facade.js
 init_functionsRoutes_0_5536817893070506();
 init_checked_fetch();
 
@@ -12873,7 +12881,7 @@ var jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
 }, "jsonError");
 var middleware_miniflare3_json_error_default = jsonError;
 
-// ../.wrangler/tmp/bundle-pyxl0j/middleware-insertion-facade.js
+// ../.wrangler/tmp/bundle-RRzLnu/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
@@ -12907,7 +12915,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// ../.wrangler/tmp/bundle-pyxl0j/middleware-loader.entry.ts
+// ../.wrangler/tmp/bundle-RRzLnu/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;
