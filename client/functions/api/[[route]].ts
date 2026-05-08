@@ -5,7 +5,7 @@ import * as schema from '../../src/db/schema';
 import { sign, verify, decode } from 'hono/jwt';
 import { eq, or, and, ne, desc } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
-import { generateGeminiText, MAYA_SYSTEM } from '../lib/gemini';
+import { generateGeminiText, ORION_SYSTEM } from '../lib/gemini';
 
 export type Bindings = {
     DB: D1Database;
@@ -1032,11 +1032,11 @@ app.post('/conversations/:id/messages', authMiddleware, async (c) => {
     return c.json({ success: true, data: { _id: newMsg.id, ...newMsg } }, 201);
 });
 
-// ─── MAYA (Gemini) ──────────────────────────────────────────
-const MAYA_GEMINI_KEY_MESSAGE =
-    'MAYA needs a non-empty GEMINI_API_KEY in client/.dev.vars (same folder as wrangler.toml). Root .env and .env.example are not loaded by Cloudflare Workers. Get a key at https://aistudio.google.com/apikey — then restart npm run dev:api (or use npm run dev:all).';
+// ─── ORION (Gemini) — routes remain /maya ───────────────────
+const ORION_GEMINI_KEY_MESSAGE =
+    'ORION needs a non-empty GEMINI_API_KEY in client/.dev.vars (same folder as wrangler.toml). Root .env and .env.example are not loaded by Cloudflare Workers. Get a key at https://aistudio.google.com/apikey — then restart npm run dev:api (or use npm run dev:all).';
 
-const MAYA_STRUCTURED_MODES = new Set([
+const ORION_STRUCTURED_MODES = new Set([
     'scope',
     'job_post',
     'milestones',
@@ -1054,7 +1054,7 @@ const MAYA_STRUCTURED_MODES = new Set([
 app.post('/maya/chat', authMiddleware, async (c) => {
     const key = c.env.GEMINI_API_KEY?.trim();
     if (!key) {
-        return c.json({ success: false, message: MAYA_GEMINI_KEY_MESSAGE }, 503);
+        return c.json({ success: false, message: ORION_GEMINI_KEY_MESSAGE }, 503);
     }
 
     const body = await c.req.json().catch(() => ({}));
@@ -1068,7 +1068,7 @@ app.post('/maya/chat', authMiddleware, async (c) => {
         );
     }
 
-    const mode = typeof body.mode === 'string' && body.mode in MAYA_SYSTEM ? body.mode : 'chat';
+    const mode = typeof body.mode === 'string' && body.mode in ORION_SYSTEM ? body.mode : 'chat';
     const rawMessages = Array.isArray(body.messages) ? body.messages : [];
     const messages = rawMessages
         .filter((m: unknown) => {
@@ -1086,8 +1086,8 @@ app.post('/maya/chat', authMiddleware, async (c) => {
         return c.json({ success: false, message: 'Provide at least one chat message' }, 400);
     }
 
-    const systemPrompt = MAYA_SYSTEM[mode];
-    const jsonMode = MAYA_STRUCTURED_MODES.has(mode);
+    const systemPrompt = ORION_SYSTEM[mode];
+    const jsonMode = ORION_STRUCTURED_MODES.has(mode);
 
     try {
         const text = await generateGeminiText({
@@ -1123,7 +1123,7 @@ app.post('/maya/chat', authMiddleware, async (c) => {
 app.post('/maya/match', authMiddleware, async (c) => {
     const key = c.env.GEMINI_API_KEY?.trim();
     if (!key) {
-        return c.json({ success: false, message: MAYA_GEMINI_KEY_MESSAGE }, 503);
+        return c.json({ success: false, message: ORION_GEMINI_KEY_MESSAGE }, 503);
     }
 
     const body = await c.req.json().catch(() => ({}));
@@ -1171,7 +1171,7 @@ app.post('/maya/match', authMiddleware, async (c) => {
     try {
         const text = await generateGeminiText({
             apiKey: key,
-            systemPrompt: MAYA_SYSTEM.match,
+            systemPrompt: ORION_SYSTEM.match,
             messages: [{ role: 'user', content: userContent }],
             jsonMode: true,
         });

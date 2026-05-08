@@ -1,11 +1,27 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
-import { Shield, Play, Menu, X, ArrowRight, Lock, Star, RefreshCw, Zap, Briefcase, Users, Bell, Clock, DollarSign, CheckCircle, Flame } from 'lucide-react';
+import {
+  Shield,
+  Play,
+  Menu,
+  X,
+  ArrowRight,
+  Lock,
+  Star,
+  RefreshCw,
+  Zap,
+  Briefcase,
+  Users,
+  Sparkles,
+  Radio,
+} from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { AI_ASSISTANT_BRAND } from '../assistantBrand';
 import './LandingPage.css';
 
 /* ——— Animated counting number ——— */
+
 const CountUp = ({ to, duration = 1.5 }) => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
@@ -44,9 +60,56 @@ const TypingLine = ({ text, delay = 0, color = '#E2E2E2' }) => {
   return <div ref={ref} style={{ color, fontFamily: "'Space Mono', monospace", fontSize: '0.75rem' }}>{displayed}<span className="cursor-blink">_</span></div>;
 };
 
+/** Marketing preview: Daily Gig card with looping swipe tease (left reject / right accept) */
+function LandingGigSwipeDemo() {
+  return (
+    <aside className="landing-gig-swipe-demo" aria-label="Daily Gig swipe preview">
+      <div className="landing-gig-swipe-demo__kicker">
+        <Radio size={12} strokeWidth={2.5} aria-hidden /> DAILY_GIG_PREVIEW
+      </div>
+      <div className="landing-gig-swipe-demo__track">
+        <span className="landing-gig-swipe-demo__lane-hint landing-gig-swipe-demo__lane-hint--reject" aria-hidden>
+          ← REJECT
+        </span>
+        <div className="landing-gig-swipe-demo__card-slot">
+          <motion.div
+            className="landing-gig-swipe-demo__card"
+            initial={false}
+            animate={{ x: [0, -20, 0, 22, 0] }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: [0.42, 0, 0.58, 1],
+              times: [0, 0.18, 0.42, 0.65, 1],
+            }}
+          >
+            <div className="landing-gig-swipe-demo__card-top">
+              <span className="landing-gig-swipe-demo__live">LIVE</span>
+              <Briefcase size={16} color="#f97316" strokeWidth={2} aria-hidden />
+            </div>
+            <p className="landing-gig-swipe-demo__title">Stripe checkout hardening</p>
+            <div className="landing-gig-swipe-demo__meta">
+              <span>$420</span>
+              <span>·</span>
+              <span>36h</span>
+            </div>
+            <div className="landing-gig-swipe-demo__skills">
+              <span>React</span>
+              <span>Node</span>
+            </div>
+            <p className="landing-gig-swipe-demo__micro">Swipe left / right on mobile</p>
+          </motion.div>
+        </div>
+        <span className="landing-gig-swipe-demo__lane-hint landing-gig-swipe-demo__lane-hint--accept" aria-hidden>
+          ACCEPT →
+        </span>
+      </div>
+    </aside>
+  );
+}
+
 const LandingPage = () => {
   const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeFeature, setActiveFeature] = useState(0);
 
@@ -65,26 +128,61 @@ const LandingPage = () => {
     { id: 'review', label: 'REVIEW SCORE', icon: <Star size={16} /> },
   ];
 
+  const scrollToId = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <div className="landing-page">
       {/* ——— NAVBAR ——— */}
-      <nav className="nav-pill-container">
-        <div className="nav-btn btn-brand"><Shield size={20} /></div>
+      <nav className="nav-pill-container" aria-label="Primary">
+        <Link to="/" className="nav-btn btn-brand" aria-label="Accredify home">
+          <Shield size={20} />
+        </Link>
         <div className="desktop-links">
-          <Link to="/" className="nav-btn btn-grey">INFO</Link>
-          <Link to="/" className="nav-btn btn-black">NEWS</Link>
-          <div className="nav-btn btn-orange">ACCREDIFY</div>
-          {isAuthenticated ? (
-            <Link to="/dashboard" className="nav-btn btn-grey">DASHBOARD</Link>
-          ) : (
-            <Link to="/login" className="nav-btn btn-grey">LOGIN</Link>
-          )}
-          <Link to={isAuthenticated ? "/dashboard" : "/register"} className="nav-btn btn-dotted">
-            DISCOVER TRUST METRICS
+          <button type="button" className="nav-btn btn-grey nav-btn-ghost" onClick={() => scrollToId('platform-stack')}>
+            PLATFORM
+          </button>
+          <button type="button" className="nav-btn btn-grey nav-btn-ghost" onClick={() => scrollToId('daily-gig')}>
+            <Radio size={14} aria-hidden /> DAILY_GIG
+          </button>
+          <Link to={isAuthenticated ? '/maya' : '/login'} className="nav-btn btn-black">
+            <Sparkles size={14} aria-hidden /> {AI_ASSISTANT_BRAND}
           </Link>
-          <div className="nav-btn btn-black">START <ArrowRight size={16} style={{ marginLeft: '6px' }} /></div>
+          <div className="nav-brand-inline" aria-hidden>
+            ACCREDIFY
+          </div>
+          {isAuthenticated ? (
+            <Link to="/dashboard" className="nav-btn btn-grey">
+              DASHBOARD
+            </Link>
+          ) : (
+            <Link to="/login" className="nav-btn btn-grey">
+              LOGIN
+            </Link>
+          )}
+          <Link to="/register" className="nav-btn btn-dotted">
+            TRUST METRICS
+          </Link>
+          <Link to="/register" className="nav-btn btn-orange">
+            START <ArrowRight size={16} style={{ marginLeft: '6px' }} />
+          </Link>
         </div>
-        <button className="nav-btn btn-square mobile-menu-btn" onClick={toggleMobileMenu}><Menu size={16} /></button>
+
+        {isAuthenticated ? (
+          <Link to="/dashboard" className="nav-mobile-start-cta nav-btn btn-grey" aria-label="Open dashboard">
+            DASHBOARD
+          </Link>
+        ) : (
+          <Link to="/register" className="nav-mobile-start-cta nav-btn btn-orange" aria-label="Get started">
+            START <ArrowRight size={15} className="nav-mobile-start-cta__arrow" aria-hidden />
+          </Link>
+        )}
+
+        <button type="button" className="nav-btn btn-square mobile-menu-btn" onClick={toggleMobileMenu} aria-expanded={isMobileMenuOpen} aria-label="Open menu">
+          <Menu size={16} />
+        </button>
       </nav>
 
       {/* ——— MOBILE MENU ——— */}
@@ -104,17 +202,35 @@ const LandingPage = () => {
             </div>
             <div className="mobile-menu-links">
               <div className="mobile-menu-index">01</div>
-              <Link to="/" onClick={toggleMobileMenu}>INFO</Link>
+              <button type="button" className="mobile-menu-anchor" onClick={() => scrollToId('landing-hero')}>
+                HOME
+              </button>
               <div className="mobile-menu-index">02</div>
-              <Link to="/" onClick={toggleMobileMenu}>NEWS</Link>
+              <button type="button" className="mobile-menu-anchor" onClick={() => scrollToId('platform-stack')}>
+                PLATFORM
+              </button>
               <div className="mobile-menu-index">03</div>
-              {isAuthenticated ? (
-                <Link to="/dashboard" onClick={toggleMobileMenu}>DASHBOARD</Link>
-              ) : (
-                <Link to="/login" onClick={toggleMobileMenu}>LOGIN</Link>
-              )}
+              <button type="button" className="mobile-menu-anchor" onClick={() => scrollToId('daily-gig')}>
+                DAILY GIG MODE
+              </button>
               <div className="mobile-menu-index">04</div>
-              <Link to="/register" onClick={toggleMobileMenu} className="mobile-link-highlight">JOIN ACCREDIFY</Link>
+              <Link to={isAuthenticated ? '/maya' : '/login'} onClick={toggleMobileMenu}>
+                {AI_ASSISTANT_BRAND} AI
+              </Link>
+              <div className="mobile-menu-index">05</div>
+              {isAuthenticated ? (
+                <Link to="/dashboard" onClick={toggleMobileMenu}>
+                  DASHBOARD
+                </Link>
+              ) : (
+                <Link to="/login" onClick={toggleMobileMenu}>
+                  LOGIN
+                </Link>
+              )}
+              <div className="mobile-menu-index">06</div>
+              <Link to="/register" onClick={toggleMobileMenu} className="mobile-link-highlight">
+                JOIN ACCREDIFY
+              </Link>
             </div>
             <div className="mobile-menu-footer">
               <span>BEHAVIORAL TRUST PROTOCOL</span>
@@ -132,90 +248,152 @@ const LandingPage = () => {
       </div>
 
       {/* ——— HERO ——— */}
-      <main className="landing-main">
-        <motion.div className="tech-spec-block spec-top-right" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.5 }}>
-          <span className="spec-highlight">MULTIPLE TRUST OPTIONS</span> INCLUDE SCOPE TRACKING AND REVISION METRICS. INSTANT BEHAVIORAL CREDIBILITY AVAILABLE VIA THE DASHBOARD. INCLUDED IN THE SYSTEM: REVISION DISCIPLINE, PAYMENT RELIABILITY.
-        </motion.div>
-
-        <motion.div className="folder-container" initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}>
-          <div className="folder-wrapper">
-            <div className="folder-tab"></div>
-            <div className="folder-back"></div>
-
-            {/* Contract Papers - Refined with Metadata */}
-            <div className="contract-paper contract-paper-1">
-              <div className="paper-header">
-                <span className="paper-title">PRJ_ID: 8829</span>
-                <span className="paper-tag">ARCHIVED // v2.4</span>
-              </div>
-              <div className="paper-content">
-                <div className="paper-metric">
-                  <span className="pm-label-paper">TRUST SCORE:</span>
-                  <span className="pm-val-paper">9.8 / 10.0</span>
-                </div>
-                <div className="paper-metric">
-                  <span className="pm-label-paper">REVISIONS:</span>
-                  <span className="pm-val-paper">02 / 05 DISCIPLINE</span>
-                </div>
-                <div className="paper-metric">
-                  <span className="pm-label-paper">REQUIREMENTS:</span>
-                  <span className="pm-val-paper">100% ADHERENCE</span>
-                </div>
-              </div>
-              <div className="paper-stamp">VERIFIED</div>
-            </div>
-
-            <div className="contract-paper contract-paper-2">
-              <div className="paper-header">
-                <span className="paper-title">PRJ_ID: 7741</span>
-                <span className="paper-tag">ARCHIVED // v1.8</span>
-              </div>
-              <div className="paper-content">
-                <div className="paper-metric">
-                  <span className="pm-label-paper">TRUST SCORE:</span>
-                  <span className="pm-val-paper">9.5 / 10.0</span>
-                </div>
-                <div className="paper-metric">
-                  <span className="pm-label-paper">REVISIONS:</span>
-                  <span className="pm-val-paper">04 / 04 COMPLETED</span>
-                </div>
-                <div className="paper-metric">
-                  <span className="pm-label-paper">ESCROW:</span>
-                  <span className="pm-val-paper">100% RELEASED</span>
-                </div>
-              </div>
-              <div className="paper-stamp">VERIFIED</div>
-            </div>
-
-            <div className="contract-paper contract-paper-3">
-              <div className="paper-header">
-                <span className="paper-title">PRJ_ID: 9942</span>
-                <span className="paper-tag">LOCKED // LIVE</span>
-              </div>
-              <div className="paper-content">
-                <div className="paper-metric">
-                  <span className="pm-label-paper">BUDGET:</span>
-                  <span className="pm-val-paper">$4,200.00 USD</span>
-                </div>
-                <div className="paper-metric">
-                  <span className="pm-label-paper">REVISIONS:</span>
-                  <span className="pm-val-paper">01 / 10 ACTIVE</span>
-                </div>
-                <div className="paper-metric">
-                  <span className="pm-label-paper">SCOPE:</span>
-                  <span className="pm-val-paper">96% DEFINED</span>
-                </div>
-              </div>
-              <div className="paper-stamp" style={{ borderColor: '#FF7A00', color: '#FF7A00' }}>PENDING</div>
-            </div>
-
-            <div className="folder-front">
-              <div className="folder-label">ACCREDIFY // TRUST_VAULT_v7.2</div>
-            </div>
+      <main className="landing-main" id="landing-hero">
+        <div className="landing-hero-top">
+          <motion.header
+            className="landing-hero-intro"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55 }}
+          >
+          <div className="landing-hero-eyebrow">
+            <span className="landing-pulse-dot" /> ACCREDIFY // TRUST_VAULT_v7.2 · BEHAVIORAL LAYER ONLINE
           </div>
-        </motion.div>
+          <h1 className="landing-hero-title">Behavioral trust infrastructure for the freelance economy.</h1>
+          <p className="landing-hero-lead">
+            <span className="spec-highlight">Multiple trust primitives</span> in one dashboard for{' '}
+            <strong>freelancers</strong>: <strong>scope adherence</strong>, <strong>revision discipline</strong>, and escrow
+            visibility — guided by AI routing ({AI_ASSISTANT_BRAND}).{' '}
+            <br />
+            <strong>Gig workers</strong> get swipeable Daily Gig offers with clear left/right actions.
+          </p>
+          <div className="landing-hero-stat-strip">
+            {[
+              { label: 'Scope adherence', val: '98%', tone: 'ok' },
+              { label: 'Payment reliability index', val: '100%', tone: 'ok' },
+              { label: 'Avg revision cycles', val: '1.2×', tone: '' },
+              { label: 'Projects on ledger', val: '124+', tone: '' },
+            ].map((s) => (
+              <div key={s.label} className={`landing-hero-chip ${s.tone === 'ok' ? 'landing-hero-chip--accent' : ''}`}>
+                <span className="landing-hero-chip__val">{s.val}</span>
+                <span className="landing-hero-chip__lbl">{s.label}</span>
+              </div>
+            ))}
+          </div>
+          <div className="landing-hero-cta-row">
+            <Link to="/register" className="landing-cta-primary">
+              Launch workspace <ArrowRight size={18} aria-hidden />
+            </Link>
+            <Link to={isAuthenticated ? '/maya' : '/login'} className="landing-cta-secondary">
+              <Sparkles size={16} aria-hidden /> {AI_ASSISTANT_BRAND} routing
+            </Link>
+          </div>
+          </motion.header>
 
-        <div className="play-btn-circle"><Play size={18} fill="currentColor" /></div>
+        <div className="landing-hero-visuals">
+          <motion.div
+            className="folder-container"
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="folder-wrapper">
+              <div className="folder-tab"></div>
+              <div className="folder-inner">
+                <div className="folder-back"></div>
+
+                {/* Contract Papers - Refined with Metadata */}
+                <div className="contract-paper contract-paper-1">
+                  <div className="paper-header">
+                    <span className="paper-title">PRJ_ID: 8829</span>
+                    <span className="paper-tag">ARCHIVED // v2.4</span>
+                  </div>
+                  <div className="paper-content">
+                    <div className="paper-metric">
+                      <span className="pm-label-paper">TRUST SCORE:</span>
+                      <span className="pm-val-paper">9.8 / 10.0</span>
+                    </div>
+                    <div className="paper-metric">
+                      <span className="pm-label-paper">REVISIONS:</span>
+                      <span className="pm-val-paper">02 / 05 DISCIPLINE</span>
+                    </div>
+                    <div className="paper-metric">
+                      <span className="pm-label-paper">REQUIREMENTS:</span>
+                      <span className="pm-val-paper">100% ADHERENCE</span>
+                    </div>
+                  </div>
+                  <div className="paper-stamp">VERIFIED</div>
+                </div>
+
+                <div className="contract-paper contract-paper-2">
+                  <div className="paper-header">
+                    <span className="paper-title">PRJ_ID: 7741</span>
+                    <span className="paper-tag">ARCHIVED // v1.8</span>
+                  </div>
+                  <div className="paper-content">
+                    <div className="paper-metric">
+                      <span className="pm-label-paper">TRUST SCORE:</span>
+                      <span className="pm-val-paper">9.5 / 10.0</span>
+                    </div>
+                    <div className="paper-metric">
+                      <span className="pm-label-paper">REVISIONS:</span>
+                      <span className="pm-val-paper">04 / 04 COMPLETED</span>
+                    </div>
+                    <div className="paper-metric">
+                      <span className="pm-label-paper">ESCROW:</span>
+                      <span className="pm-val-paper">100% RELEASED</span>
+                    </div>
+                  </div>
+                  <div className="paper-stamp">VERIFIED</div>
+                </div>
+
+                <div className="contract-paper contract-paper-3">
+                  <div className="paper-header">
+                    <span className="paper-title">PRJ_ID: 9942</span>
+                    <span className="paper-tag">LOCKED // LIVE</span>
+                  </div>
+                  <div className="paper-content">
+                    <div className="paper-metric">
+                      <span className="pm-label-paper">BUDGET:</span>
+                      <span className="pm-val-paper">$4,200.00 USD</span>
+                    </div>
+                    <div className="paper-metric">
+                      <span className="pm-label-paper">REVISIONS:</span>
+                      <span className="pm-val-paper">01 / 10 ACTIVE</span>
+                    </div>
+                    <div className="paper-metric">
+                      <span className="pm-label-paper">SCOPE:</span>
+                      <span className="pm-val-paper">96% DEFINED</span>
+                    </div>
+                  </div>
+                  <div className="paper-stamp" style={{ borderColor: '#FF7A00', color: '#FF7A00' }}>PENDING</div>
+                </div>
+
+                <div className="folder-front">
+                  <div className="folder-label">ACCREDIFY // TRUST_VAULT_v7.2</div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+          <div className="landing-hero-right-copy">
+            <div className="landing-hero-right-kicker">FOR_FREELANCERS</div>
+            <h3 className="landing-hero-right-title">Contract papers that stay enforceable.</h3>
+            <p className="landing-hero-right-body">
+              Lock scope, log revision discipline, and keep escrow visibility transparent on your trust vault.
+            </p>
+          </div>
+        </div>
+
+        </div>
+
+        <button
+          type="button"
+          className="play-btn-circle"
+          aria-label="Scroll to platform overview"
+          onClick={() => scrollToId('platform-stack')}
+        >
+          <Play size={18} fill="currentColor" />
+        </button>
 
         <div className="floating-label label-reliability">RELIABILITY_LOGS</div>
         <div className="floating-label label-protocol">TRUST_PROTOCOL</div>
@@ -224,113 +402,86 @@ const LandingPage = () => {
         <div className="floating-label label-metrics">METRICS_v7.2</div>
         <div className="floating-label label-init">INITIALIZE</div>
 
-        <motion.div className="tech-spec-block spec-bottom-left" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.6 }}>
-          THE BEHAVIORAL TRUST INFRASTRUCTURE FOR THE FREELANCE ECONOMY. <span className="spec-highlight">CONVERT PROJECT AGREEMENTS INTO REAL-TIME CREDIBILITY.</span> ALIGN DELIVERABLES, SHOWCASE EFFICIENCY, AND ATTRACT TOP TALENT.
-        </motion.div>
-
-        <motion.div className="tech-spec-block spec-bottom-right" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.7 }}>
-          <ul className="spec-list">
+        <motion.footer
+          className="landing-hero-foot"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, delay: 0.2 }}
+        >
+          <div className="landing-hero-foot__main">
+            <p>
+              Agreements become <span className="spec-highlight">verifiable timelines</span> — not screenshots and good
+              intentions. Showcase delivery discipline so clients recruit with confidence.
+            </p>
+          </div>
+          <ul className="spec-list spec-list--hero-foot">
             <li>SCOPE ADHERENCE TRACKING</li>
             <li>REVISION DISCIPLINE METRICS</li>
             <li>PAYMENT RELIABILITY LOGS</li>
             <li>IMMUTABLE PROJECT HISTORY</li>
             <li>GLOBAL CREDIBILITY PROFILE</li>
-            <li>INSTANT DASHBOARD ACCESS</li>
+            <li>INSTANT DASHBOARD + {AI_ASSISTANT_BRAND} AI</li>
           </ul>
-        </motion.div>
+          <div className="landing-hero-foot__cta">
+            <span className="landing-hero-foot__convert">CONVERT CREDIBILITY · NOT JUST CONTRACTS.</span>
+            <Link to="/register" className="landing-foot-link">
+              Open an operator profile →
+            </Link>
+          </div>
+        </motion.footer>
       </main>
 
-      {/* ——— DUAL BRANCH SECTION ——— */}
-      <section className="dual-branch-section" id="dual-branch">
-        <div className="dual-branch-header">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-          >
-            <div className="dual-branch-sys-label">TWO BRANCHES // ONE NETWORK</div>
-            <h2 className="dual-branch-title">
-              CHOOSE YOUR <span className="text-orange">ENGAGEMENT MODEL</span>
-            </h2>
-            <p className="dual-branch-desc">
-              Accredify operates dual branches to match your preferred working style. Build long-term professional credibility or jump into instant, real-time gig opportunities.
+      {/* ——— DAILY GIG + ORION HIGHLIGHT ——— */}
+      <section id="daily-gig" className="landing-quick-features">
+        <div className="landing-quick-features__grid">
+          <article className="landing-qd-card">
+            <div className="landing-qd-card__tag">
+              <Radio size={14} aria-hidden /> FOR_GIG_WORKERS
+            </div>
+            <h3 className="landing-qd-card__title">Swipe offers: left reject, right approve.</h3>
+            <div className="landing-gig-swipe-inline" aria-hidden>
+              <LandingGigSwipeDemo />
+            </div>
+            <p className="landing-qd-card__body">
+              Gig workers see scoped micro-gigs and decide fast. Accept to lock the gig and connect chat — reject to
+              pass. When you’re busy, offers queue and stack.
             </p>
-          </motion.div>
-        </div>
-
-        <div className="branch-cards-container">
-          {/* Freelancer Branch */}
-          <motion.div
-            className="branch-card freelancer-card"
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-          >
-            <Briefcase size={200} className="branch-card-bg-icon" />
-            <div className="branch-tag">BRANCH 01: CORE</div>
-            <h3 className="branch-title">PROPOSAL-BASED<br />FREELANCING</h3>
-            <ul className="branch-features">
-              <li><CheckCircle size={16} /> Strict scope locking and milestones</li>
-              <li><CheckCircle size={16} /> Revision tracking and discipline logs</li>
-              <li><CheckCircle size={16} /> Payment security via Escrow Vault</li>
-              <li><CheckCircle size={16} /> Long-term behavioral credibility score</li>
+            <ul className="landing-qd-metrics">
+              <li>
+                <strong>Swipe decision loop</strong> — clear left/right actions
+              </li>
+              <li>
+                <strong>≤10s acceptance window</strong> — fairness for responders
+              </li>
+              <li>
+                <strong>Skill-tagged routing</strong> — overlap with gig requirements
+              </li>
             </ul>
-            <div style={{ marginTop: 'auto' }}>
-              <Link to="/register" className="ind-btn ind-btn-outline" style={{ border: '1px solid #555', color: '#E2E2E2', width: '100%', textAlign: 'center', display: 'block' }}>
-                BUILD CREDIBILITY
-              </Link>
+          </article>
+          <article className="landing-qd-card landing-qd-card--dark">
+            <div className="landing-qd-card__tag landing-qd-card__tag--light">
+              <Sparkles size={14} aria-hidden /> {AI_ASSISTANT_BRAND} · AI_ROUTING
             </div>
-          </motion.div>
-
-          {/* Gig Worker Branch */}
-          <motion.div
-            className="branch-card gig-worker-card"
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-          >
-            <Flame size={200} className="branch-card-bg-icon" />
-            <div className="branch-tag">BRANCH 02: ACTIVE</div>
-            <h3 className="branch-title">REAL-TIME<br />GIG NETWORK</h3>
-            <ul className="branch-features">
-              <li><Zap size={16} /> Toggle "Daily Gig Mode" to go live</li>
-              <li><Zap size={16} /> No proposals. Get matched instantly</li>
-              <li><Zap size={16} /> Instant popup notifications for new gigs</li>
-              <li><Zap size={16} /> Immediate chat and commencement</li>
-            </ul>
-            
-            {/* Live Popup Mockup */}
-            <div className="daily-gig-mockup">
-              <div className="mockup-header">
-                <div className="mockup-title">
-                  <div className="mockup-status-dot"></div>
-                  DAILY GIG MODE: ONLINE
-                </div>
-                <div className="mockup-toggle"></div>
-              </div>
-              
-              <div className="mockup-popup">
-                <div className="mockup-popup-label"><Bell size={12} /> NEW GIG MATCH</div>
-                <div className="mockup-gig-title">React Dashboard Fix</div>
-                <div className="mockup-gig-details">
-                  <div className="mockup-gig-detail"><DollarSign size={12} style={{verticalAlign:'middle', marginRight:'2px'}}/><span>$150</span></div>
-                  <div className="mockup-gig-detail"><Clock size={12} style={{verticalAlign:'middle', marginRight:'2px'}}/><span>~2 Hours</span></div>
-                </div>
-                <div className="mockup-buttons">
-                  <div className="mockup-btn mockup-btn-reject">REJECT</div>
-                  <div className="mockup-btn mockup-btn-accept">ACCEPT</div>
-                </div>
-              </div>
+            <h3 className="landing-qd-card__title landing-qd-card__title--light">
+              Gemini-powered match context.
+            </h3>
+            <p className="landing-qd-card__body landing-qd-card__body--muted">
+              {AI_ASSISTANT_BRAND} summarizes requirements, aligns skills, and proposes fit — anchored to behavioral
+              metrics on ledger, not inflated bios.
+            </p>
+            <div className="landing-qd-faux-log">
+              <span className="landing-qd-faux-log__line">{'>'} INGEST_JOB_SPEC · READY</span>
+              <span className="landing-qd-faux-log__line">{'>'} TRUST_WEIGHT_APPLIED · 0.984</span>
+              <span className="landing-qd-faux-log__line landing-qd-faux-log__line--accent">
+                {'>'} {AI_ASSISTANT_BRAND}_REPLY_STREAM · OK
+              </span>
             </div>
-          </motion.div>
+          </article>
         </div>
       </section>
 
       {/* ——— PLATFORM INTRO BAND ——— */}
-      <section className="platform-band">
+      <section className="platform-band" id="platform-stack">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

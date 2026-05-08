@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { mayaAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { AI_ASSISTANT_BRAND } from '../assistantBrand';
 
 const MODE_OPTIONS = [
     { id: 'chat', label: 'Hiring chat', Icon: MessageSquare, hint: 'Describe the work naturally' },
@@ -207,8 +208,8 @@ const MayaPage = () => {
             <div className="ind-page-inner">
                 <div className="ind-page-header">
                     <div>
-                        <div className="ind-page-sys-label">SYS_MAYA // GEMINI_AI</div>
-                        <h1 className="ind-page-title">MAYA</h1>
+                        <div className="ind-page-sys-label">{`SYS_${AI_ASSISTANT_BRAND} // GEMINI_AI`}</div>
+                        <h1 className="ind-page-title">{AI_ASSISTANT_BRAND}</h1>
                         <p className="ind-page-sub">
                             Hiring assistant powered by Gemini. Pick a mode, describe your goal, send — or match against
                             real freelancers from the directory. Local setup: put <code>GEMINI_API_KEY</code> in{' '}
@@ -298,7 +299,7 @@ const MayaPage = () => {
                                             marginBottom: '0.2rem',
                                         }}
                                     >
-                                        {m.role === 'user' ? 'YOU' : 'MAYA'}
+                                        {m.role === 'user' ? 'YOU' : AI_ASSISTANT_BRAND}
                                     </span>
                                     <div
                                         style={{
@@ -328,7 +329,9 @@ const MayaPage = () => {
                                 </div>
                             ))}
                             {loading && (
-                                <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>MAYA is thinking…</div>
+                                <div style={{ color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+                                    {AI_ASSISTANT_BRAND} is thinking…
+                                </div>
                             )}
                             <div ref={bottomRef} />
                         </div>

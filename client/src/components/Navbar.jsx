@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { usersAPI } from '../services/api';
 import toast from 'react-hot-toast';
 import { Shield, LogOut, User, ChevronDown, UserCircle, MessageCircle, Users, Sparkles, Zap } from 'lucide-react';
+import { AI_ASSISTANT_BRAND } from '../assistantBrand';
 
 const Navbar = () => {
     const { user, logout, isAuthenticated, refreshUser } = useAuth();
@@ -79,7 +80,7 @@ const Navbar = () => {
                         <MessageCircle size={16} /> Messages
                     </Link>
                     <Link to="/maya" className="ind-nav-link">
-                        <Sparkles size={16} /> MAYA
+                        <Sparkles size={16} /> {AI_ASSISTANT_BRAND}
                     </Link>
                     <Link to="/dashboard" className="ind-nav-link">
                         Dashboard

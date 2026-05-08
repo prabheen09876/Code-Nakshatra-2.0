@@ -166,7 +166,7 @@ export const gigsAPI = {
 };
 
 // ------------- Conversations API (user-to-user chat) -------------
-// ------------- MAYA (Gemini) API -------------
+// ------------- ORION (Gemini), POST /maya/* -------------
 export const mayaAPI = {
     chat: async ({ mode = 'chat', messages }) => {
         const response = await api.post('/maya/chat', { mode, messages });

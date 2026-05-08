@@ -15,6 +15,20 @@ const INSTANT_GIG_VISIBILITY_MS = 9500;
 
 const SK_DISMISS_PREFIX = 'dailyGig_offer_dismiss';
 
+const MAX_VISIBLE_PEEK_STRIPS = 4;
+
+/** Remaining swipe window from server createdAt — floor when a buried offer surfaces */
+function offerVisibilityMsRemaining(offer, capMs = INSTANT_GIG_VISIBILITY_MS) {
+    try {
+        const t = new Date(offer.createdAt).getTime();
+        if (!Number.isFinite(t)) return capMs;
+        const left = capMs - (Date.now() - t);
+        return Math.min(capMs, Math.max(2200, left));
+    } catch {
+        return capMs;
+    }
+}
+
 function dismissedOfferIds() {
     try {
         const raw = sessionStorage.getItem(SK_DISMISS_PREFIX);
@@ -42,8 +56,54 @@ function parseSkillTags(offer) {
     return [];
 }
 
-/** Rapido-style swipe: left = decline, right = accept */
+/** Aligns with `DailyGigLiveLayer.css`: mobile swipe, wider viewports show action buttons */
+const DAILY_GIG_DESKTOP_MQ = '(min-width: 640px)';
+
+function useFreelancerGigWideLayout() {
+    const [wide, setWide] = useState(() =>
+        typeof window !== 'undefined' ? window.matchMedia(DAILY_GIG_DESKTOP_MQ).matches : false,
+    );
+    useEffect(() => {
+        const mq = window.matchMedia(DAILY_GIG_DESKTOP_MQ);
+        const sync = () => setWide(mq.matches);
+        sync();
+        mq.addEventListener('change', sync);
+        return () => mq.removeEventListener('change', sync);
+    }, []);
+    return wide;
+}
+
+function FreelancerGigPeekOverflowStrip({ extraCount }) {
+    return (
+        <div className="daily-gig-peel-strip daily-gig-peel-strip--overflow" aria-hidden>
+            <div className="daily-gig-peel-strip__inner daily-gig-peel-strip__inner--overflow">
+                <span className="daily-gig-peel-strip__overflow-text">+{extraCount} more in queue</span>
+            </div>
+        </div>
+    );
+}
+
+/** Tab-style strip for offers waiting behind the active card */
+function FreelancerGigPeekStrip({ offer, layerFromBack }) {
+    const scale = Math.max(0.9, 1 - (layerFromBack + 1) * 0.028);
+    return (
+        <div
+            className="daily-gig-peel-strip"
+            style={{ transform: `scale(${scale})`, transformOrigin: 'bottom center' }}
+            aria-hidden
+        >
+            <div className="daily-gig-peel-strip__inner">
+                <Briefcase size={16} strokeWidth={2} color="#f97316" aria-hidden />
+                <span className="daily-gig-peel-strip__title">{offer.title}</span>
+                <span className="daily-gig-peel-strip__budget">{offer.budget}</span>
+            </div>
+        </div>
+    );
+}
+
+/** Mobile: swipe left = decline, right = accept. Desktop (width >= 640px): Accept / Decline buttons only */
 function FreelancerGigSwipeSheet({ offer, busy, onAccept, onReject, visibilityMs = INSTANT_GIG_VISIBILITY_MS }) {
+    const desktopLayout = useFreelancerGigWideLayout();
     const cardRef = useRef(null);
     const startX = useRef(0);
     const startY = useRef(0);
@@ -53,10 +113,22 @@ function FreelancerGigSwipeSheet({ offer, busy, onAccept, onReject, visibilityMs
     const [dragX, setDragX] = useState(0);
     const [isDragging, setIsDragging] = useState(false);
     const onRejectRef = useRef(onReject);
+    const desktopLayoutRef = useRef(desktopLayout);
+    desktopLayoutRef.current = desktopLayout;
 
     useEffect(() => {
         onRejectRef.current = onReject;
     }, [onReject]);
+
+    useEffect(() => {
+        if (desktopLayout) {
+            tracking.current = false;
+            swipeAxis.current = null;
+            dragXRef.current = 0;
+            setDragX(0);
+            setIsDragging(false);
+        }
+    }, [desktopLayout]);
 
     useEffect(() => {
         const oid = offer.offerId;
@@ -74,7 +146,7 @@ function FreelancerGigSwipeSheet({ offer, busy, onAccept, onReject, visibilityMs
     };
 
     const handlePointerDown = (e) => {
-        if (busy) return;
+        if (desktopLayoutRef.current || busy) return;
         if (e.button != null && e.button !== 0) return;
         startX.current = e.clientX;
         startY.current = e.clientY;
@@ -85,7 +157,7 @@ function FreelancerGigSwipeSheet({ offer, busy, onAccept, onReject, visibilityMs
     };
 
     const handlePointerMove = (e) => {
-        if (!tracking.current || busy) return;
+        if (desktopLayoutRef.current || !tracking.current || busy) return;
         let dx = e.clientX - startX.current;
         const dy = e.clientY - startY.current;
 
@@ -102,7 +174,7 @@ function FreelancerGigSwipeSheet({ offer, busy, onAccept, onReject, visibilityMs
     };
 
     const handlePointerUpOrCancel = (e) => {
-        if (!tracking.current) return;
+        if (desktopLayoutRef.current || !tracking.current) return;
         tracking.current = false;
         swipeAxis.current = null;
         setIsDragging(false);
@@ -131,10 +203,10 @@ function FreelancerGigSwipeSheet({ offer, busy, onAccept, onReject, visibilityMs
         setDragX(0);
     };
 
-    const rejectActive = dragX <= -28;
-    const acceptActive = dragX >= 28;
+    const rejectActive = !desktopLayout && dragX <= -28;
+    const acceptActive = !desktopLayout && dragX >= 28;
 
-    const rotateDeg = dragX * 0.02;
+    const rotateDeg = desktopLayout ? 0 : dragX * 0.02;
 
     return (
         <div className="daily-gig-sheet">
@@ -162,9 +234,9 @@ function FreelancerGigSwipeSheet({ offer, busy, onAccept, onReject, visibilityMs
                 <div className="daily-gig-swipe-card-wrap">
                     <article
                         ref={cardRef}
-                        className={`daily-gig-swipe-card${isDragging ? '' : ' daily-gig-swipe-card--spring'}`}
+                        className={`daily-gig-swipe-card${desktopLayout ? ' daily-gig-swipe-card--desktop' : ''}${!desktopLayout && !isDragging ? ' daily-gig-swipe-card--spring' : ''}${!desktopLayout ? ' daily-gig-swipe-card--draggable' : ''}`}
                         style={{
-                            transform: `translateX(${dragX}px) rotate(${rotateDeg}deg)`,
+                            transform: desktopLayout ? undefined : `translateX(${dragX}px) rotate(${rotateDeg}deg)`,
                             opacity: busy ? 0.88 : 1,
                         }}
                         onPointerDown={handlePointerDown}
@@ -262,11 +334,10 @@ function FreelancerGigSwipeSheet({ offer, busy, onAccept, onReject, visibilityMs
                             </p>
                         )}
 
-                        <div style={{ display: 'flex', gap: 8 }}>
+                        <div className="daily-gig-freelancer-actions" role="group" aria-label="Respond to gig offer">
                             <button
                                 type="button"
-                                className="ind-btn ind-btn-outline"
-                                style={{ flex: 1, touchAction: 'manipulation', minHeight: 44 }}
+                                className="ind-btn ind-btn-outline daily-gig-btn-decline"
                                 disabled={busy}
                                 onClick={() => onReject({ timedOut: false, offerId: offer.offerId })}
                             >
@@ -274,19 +345,66 @@ function FreelancerGigSwipeSheet({ offer, busy, onAccept, onReject, visibilityMs
                             </button>
                             <button
                                 type="button"
-                                className="ind-btn ind-btn-orange"
-                                style={{ flex: 1, touchAction: 'manipulation', minHeight: 44 }}
+                                className="ind-btn ind-btn-orange daily-gig-btn-accept"
                                 disabled={busy}
                                 onClick={() => onAccept()}
                             >
                                 {busy ? '…' : 'Accept'}
                             </button>
                         </div>
-                        <div className="daily-gig-pill-help">
-                            Swipe left to decline · right to accept · auto-declines after {Math.round(visibilityMs / 1000)}s
-                        </div>
+                        <p className="daily-gig-pill-help daily-gig-pill-help--mobile">
+                            Swipe the card left to decline, right to accept · auto-declines after {Math.round(visibilityMs / 1000)}s
+                        </p>
+                        <p className="daily-gig-pill-help daily-gig-pill-help--desktop">
+                            Decline or Accept using the buttons above · offer closes after {Math.round(visibilityMs / 1000)}s
+                        </p>
                     </article>
                 </div>
+            </div>
+        </div>
+    );
+}
+
+/** Oldest pending offer is actionable on top; newer offers stack above like browser tabs */
+function FreelancerGigOfferStack({ offers, busy, onAccept, onReject }) {
+    const front = offers[0];
+    const behindFull = offers.length > 1 ? offers.slice(1).reverse() : [];
+    const trimmed =
+        behindFull.length > MAX_VISIBLE_PEEK_STRIPS ? behindFull.slice(-MAX_VISIBLE_PEEK_STRIPS) : behindFull;
+    const overflowExtra = Math.max(0, behindFull.length - trimmed.length);
+    const behindVisible = trimmed;
+    const peelCount = behindVisible.length + (overflowExtra > 0 ? 1 : 0);
+    const visibilityMs = offerVisibilityMsRemaining(front);
+
+    return (
+        <div className="daily-gig-stack">
+            {behindFull.length > 0 && (
+                <div className="daily-gig-stack__peels">
+                    {overflowExtra > 0 && (
+                        <div className="daily-gig-stack-peel-slot daily-gig-stack-peel-slot--overflow" style={{ zIndex: 1 }}>
+                            <FreelancerGigPeekOverflowStrip extraCount={overflowExtra} />
+                        </div>
+                    )}
+                    {behindVisible.map((o, peelIdx) => (
+                        <div
+                            key={o.offerId}
+                            className="daily-gig-stack-peel-slot"
+                            style={{ zIndex: (overflowExtra > 0 ? 1 : 0) + peelIdx + 1 }}
+                        >
+                            <FreelancerGigPeekStrip offer={o} layerFromBack={behindVisible.length - 1 - peelIdx} />
+                        </div>
+                    ))}
+                </div>
+            )}
+            <div className="daily-gig-stack__front" style={{ zIndex: peelCount + 2 }}>
+                <FreelancerGigSwipeSheet
+                    key={front.offerId}
+                    offer={front}
+                    busy={busy}
+                    onAccept={onAccept}
+                    onReject={onReject}
+                    visibilityMs={visibilityMs}
+                />
             </div>
         </div>
     );
@@ -363,7 +481,7 @@ function ClientGigAcceptedSheet({ alert: a, onClose, onOpenChat, visibilityMs })
 const DailyGigLiveLayer = () => {
     const { user, refreshUser } = useAuth();
     const navigate = useNavigate();
-    const [freelancerOffer, setFreelancerOffer] = useState(null);
+    const [freelancerOffers, setFreelancerOffers] = useState([]);
     const [clientAlert, setClientAlert] = useState(null);
     const [busy, setBusy] = useState(false);
     const seenRecruiterAlertIds = useRef(new Set());
@@ -372,8 +490,8 @@ const DailyGigLiveLayer = () => {
     const freelancerProfileSynced = useRef(false);
 
     useEffect(() => {
-        offerRef.current = freelancerOffer;
-    }, [freelancerOffer]);
+        offerRef.current = freelancerOffers[0] ?? null;
+    }, [freelancerOffers]);
 
     useEffect(() => {
         if (!user) {
@@ -385,18 +503,16 @@ const DailyGigLiveLayer = () => {
         refreshUser();
     }, [user?.id, user?.role, refreshUser]);
 
-    const pickFreelancerOffer = useCallback((rows) => {
+    const buildFreelancerOfferStack = useCallback((rows) => {
         const dismissed = dismissedOfferIds();
-        for (const row of rows) {
-            const id = Number(row.offerId);
-            if (!dismissed.has(id)) return row;
-        }
-        return null;
+        const pending = rows.filter((r) => !dismissed.has(Number(r.offerId)));
+        pending.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+        return pending;
     }, []);
 
     useEffect(() => {
         if (user?.role !== 'freelancer' || !user?.dailyGigMode) {
-            setFreelancerOffer(null);
+            setFreelancerOffers([]);
             return;
         }
         let cancel = false;
@@ -404,12 +520,7 @@ const DailyGigLiveLayer = () => {
             try {
                 const res = await gigsAPI.getFreelancerOffers();
                 if (cancel || !res.success || !Array.isArray(res.data)) return;
-                setFreelancerOffer((prev) => {
-                    const next = pickFreelancerOffer(res.data);
-                    if (!next) return null;
-                    if (prev?.offerId === next.offerId) return prev;
-                    return next;
-                });
+                setFreelancerOffers(buildFreelancerOfferStack(res.data));
             } catch {
                 /* ignore */
             }
@@ -420,7 +531,7 @@ const DailyGigLiveLayer = () => {
             cancel = true;
             clearInterval(iv);
         };
-    }, [user?.role, user?.dailyGigMode, pickFreelancerOffer]);
+    }, [user?.role, user?.dailyGigMode, buildFreelancerOfferStack]);
 
     useEffect(() => {
         if (user?.role !== 'client') {
@@ -457,7 +568,7 @@ const DailyGigLiveLayer = () => {
         try {
             await gigsAPI.respondToOffer(offerId, 'reject');
             dismissOfferStorage(offerId);
-            setFreelancerOffer(null);
+            setFreelancerOffers((prev) => prev.filter((o) => o.offerId !== offerId));
             if (opts.timedOut) toast('Time up — gig auto-declined', { icon: '⏱', duration: 3500 });
             else toast.success('Declined');
         } catch (err) {
@@ -487,7 +598,7 @@ const DailyGigLiveLayer = () => {
             if (!res.success) throw new Error(res.message || 'failed');
             const clientId = res.data?.clientId;
             dismissOfferStorage(cur.offerId);
-            setFreelancerOffer(null);
+            setFreelancerOffers((prev) => prev.filter((o) => o.offerId !== cur.offerId));
             toast.success('Gig accepted — opening messages');
             navigate(`/messages?with=${encodeURIComponent(clientId)}`);
         } catch (err) {
@@ -510,12 +621,22 @@ const DailyGigLiveLayer = () => {
         setClientAlert(null);
     };
 
-    if (freelancerOffer) {
+    if (freelancerOffers.length > 0) {
         return createPortal(
-            <div className="daily-gig-overlay">
-                <FreelancerGigSwipeSheet
-                    key={freelancerOffer.offerId}
-                    offer={freelancerOffer} busy={busy} onAccept={handleAcceptOffer} onReject={handleRejectFromSwipe} />
+            <div
+                className={`daily-gig-overlay${freelancerOffers.length > 1 ? ' daily-gig-overlay--stacked' : ''}`}
+            >
+                {freelancerOffers.length > 1 && (
+                    <div className="daily-gig-stack-count-pill" role="status" aria-live="polite">
+                        {freelancerOffers.length} gigs
+                    </div>
+                )}
+                <FreelancerGigOfferStack
+                    offers={freelancerOffers}
+                    busy={busy}
+                    onAccept={handleAcceptOffer}
+                    onReject={handleRejectFromSwipe}
+                />
             </div>,
             document.body,
         );
